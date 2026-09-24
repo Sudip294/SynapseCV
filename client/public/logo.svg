@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
+  <defs>
+    <linearGradient id="synapseGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#3b6cf6" />
+      <stop offset="100%" stop-color="#1d3cb4" />
+    </linearGradient>
+    <linearGradient id="accentGrad" x1="0%" y1="100%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#06b6d4" />
+      <stop offset="100%" stop-color="#3b6cf6" />
+    </linearGradient>
+  </defs>
+  <!-- Background Shield/Card Container -->
+  <rect x="10" y="10" width="80" height="80" rx="20" fill="url(#synapseGrad)" />
+  
+  <!-- Neural Nodes & Connections -->
+  <path d="M30 35 L50 25 L70 35 L70 65 L50 75 L30 65 Z" stroke="white" stroke-width="3" stroke-linejoin="round" opacity="0.3"/>
+  <path d="M30 35 L50 50 L70 35" stroke="url(#accentGrad)" stroke-width="4" stroke-linecap="round"/>
+  <path d="M50 50 L50 75" stroke="url(#accentGrad)" stroke-width="4" stroke-linecap="round"/>
+  
+  <!-- Synapse Hub Points -->
+  <circle cx="50" cy="25" r="5" fill="#38bdf8" />
+  <circle cx="30" cy="35" r="4" fill="#ffffff" />
+  <circle cx="70" cy="35" r="4" fill="#ffffff" />
+  <circle cx="50" cy="50" r="6" fill="#ffffff" />
+  <circle cx="30" cy="65" r="4" fill="#ffffff" />
+  <circle cx="70" cy="65" r="4" fill="#ffffff" />
+  <circle cx="50" cy="75" r="5" fill="#38bdf8" />
+</svg>

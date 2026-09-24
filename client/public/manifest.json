@@ -1,0 +1,18 @@
+{
+  "short_name": "SynapseCV",
+  "name": "SynapseCV - AI Resume Builder & ATS Analyzer SaaS",
+  "icons": [
+    {
+      "src": "logo.svg",
+      "sizes": "192x192 512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "start_url": "/",
+  "background_color": "#090d16",
+  "theme_color": "#3b6cf6",
+  "display": "standalone",
+  "orientation": "portrait",
+  "description": "Production-Quality AI Resume Builder and Resume Analyzer SaaS"
+}
