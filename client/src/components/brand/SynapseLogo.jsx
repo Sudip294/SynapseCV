@@ -1,6 +1,6 @@
 import React from 'react';
 
-export const SynapseLogo = ({ className = "h-8 w-auto", showText = true, textSize = "text-xl" }) => {
+export const SynapseLogo = ({ className = "h-8 w-auto", showText = true, textSize = "text-xl", textColor }) => {
   return (
     <div className="flex items-center gap-2.5 select-none cursor-pointer">
       <div className="relative flex items-center justify-center">
@@ -34,7 +34,7 @@ export const SynapseLogo = ({ className = "h-8 w-auto", showText = true, textSiz
         </svg>
       </div>
       {showText && (
-        <span className={`font-extrabold tracking-tight ${textSize} text-slate-900 dark:text-white flex items-center`}>
+        <span className={`font-extrabold tracking-tight ${textSize} ${textColor || 'text-slate-900 dark:text-white'} flex items-center`}>
           Synapse<span className="text-brand-600 dark:text-brand-400 ml-0.5">CV</span>
         </span>
       )}

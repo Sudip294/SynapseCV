@@ -17,7 +17,7 @@ export const ExecutiveTemplate = ({ resume }) => {
   } = resume;
 
   return (
-    <div className="bg-white text-slate-900 p-8 sm:p-10 font-sans max-w-[800px] mx-auto min-h-[1050px] shadow-sm leading-normal">
+    <div className="bg-white text-slate-900 p-8 sm:p-10 font-sans max-w-[800px] mx-auto shadow-sm leading-normal">
       
       {/* HEADER SECTION */}
       <header className="border-b border-slate-300 pb-4 mb-5 text-center">

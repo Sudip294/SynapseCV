@@ -13,7 +13,7 @@ export const CompactTemplate = ({ resume }) => {
   } = resume;
 
   return (
-    <div className="bg-white text-slate-900 p-6 sm:p-8 font-sans max-w-[800px] mx-auto min-h-[1050px] shadow-sm leading-tight text-xs space-y-3">
+    <div className="bg-white text-slate-900 p-6 sm:p-8 font-sans max-w-[800px] mx-auto shadow-sm leading-tight text-xs space-y-3">
       {/* HEADER */}
       <header className="text-center border-b border-slate-900 pb-2">
         <h1 className="text-2xl font-black uppercase text-slate-900 tracking-tight">

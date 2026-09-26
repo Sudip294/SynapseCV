@@ -9,7 +9,7 @@ export const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-5 gap-8 lg:gap-12">
           {/* Brand Info */}
           <div className="md:col-span-2 space-y-4">
-            <SynapseLogo className="h-8 w-auto" textSize="text-2xl" />
+            <SynapseLogo className="h-8 w-auto" textSize="text-2xl" textColor="text-white" />
             <p className="text-sm text-slate-400 max-w-sm leading-relaxed">
               Production-grade AI resume builder and ATS analyzer SaaS engineered to help software engineers and ambitious professionals land dream roles at top tech companies.
             </p>

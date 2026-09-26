@@ -15,7 +15,7 @@ export const CorporateTemplate = ({ resume }) => {
   } = resume;
 
   return (
-    <div className="bg-white text-slate-900 p-8 sm:p-10 font-sans max-w-[800px] mx-auto min-h-[1050px] shadow-sm leading-normal">
+    <div className="bg-white text-slate-900 p-8 sm:p-10 font-sans max-w-[800px] mx-auto shadow-sm leading-normal">
       {/* TOP BRAND HEADER */}
       <header className="bg-slate-900 text-white p-6 rounded-lg mb-6">
         <h1 className="text-2xl font-extrabold uppercase tracking-wide text-white">

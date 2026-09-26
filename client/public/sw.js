@@ -1,9 +1,20 @@
-const CACHE_NAME = 'synapsecv-cache-v1';
+const CACHE_NAME = 'synapsecv-cache-v2';
 const ASSETS_TO_CACHE = [
-  '/',
-  '/index.html',
   '/logo.svg',
   '/manifest.json'
+];
+
+// Skip caching for these patterns (JS, CSS, API calls, Vite HMR)
+const SKIP_CACHE_PATTERNS = [
+  /\.jsx?$/,
+  /\.tsx?$/,
+  /\.css$/,
+  /\/api\//,
+  /\/@vite\//,
+  /\/__vite/,
+  /\/node_modules\//,
+  /\?v=/,
+  /\?t=/,
 ];
 
 self.addEventListener('install', (event) => {
@@ -32,7 +43,15 @@ self.addEventListener('activate', (event) => {
 
 self.addEventListener('fetch', (event) => {
   if (event.request.method !== 'GET') return;
-  
+
+  const url = new URL(event.request.url);
+
+  // Always bypass cache for JS, CSS, API requests and Vite dev server files
+  const shouldSkip = SKIP_CACHE_PATTERNS.some(pattern => pattern.test(url.pathname + url.search));
+  if (shouldSkip) {
+    return; // Let browser fetch directly — no SW interception
+  }
+
   event.respondWith(
     caches.match(event.request).then((cachedResponse) => {
       if (cachedResponse) return cachedResponse;

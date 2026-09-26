@@ -13,7 +13,7 @@ export const CreativeTemplate = ({ resume }) => {
   } = resume;
 
   return (
-    <div className="bg-white text-slate-900 p-8 sm:p-10 font-sans max-w-[800px] mx-auto min-h-[1050px] shadow-sm leading-normal grid grid-cols-12 gap-6">
+    <div className="bg-white text-slate-900 p-8 sm:p-10 font-sans max-w-[800px] mx-auto shadow-sm leading-normal grid grid-cols-12 gap-6">
       {/* LEFT COLUMN (Header & Sidebar) */}
       <div className="col-span-4 border-r border-slate-200 pr-4 space-y-6">
         <div>

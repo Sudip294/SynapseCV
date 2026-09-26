@@ -43,21 +43,36 @@
 
 /* Print Friendly Styles for PDF Export */
 @media print {
-  body {
-    background: white !important;
-    color: black !important;
-  }
-
-  header, footer, nav, button, .no-print {
+  /* 1. Hide EVERY direct child of body except the print-only resume div */
+  /*    display:none takes zero space — no blank pages from hidden content */
+  body > *:not(#resume-print-only) {
     display: none !important;
   }
 
-  .print-only {
+  /* 2. Make the print resume visible and fill the page naturally */
+  #resume-print-only {
     display: block !important;
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    background: white !important;
+    box-shadow: none !important;
+    border: none !important;
+    border-radius: 0 !important;
+  }
+
+  /* 3. Colors & backgrounds must print correctly */
+  * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
   }
 
   @page {
-    margin: 12mm;
+    margin: 10mm;
     size: A4 portrait;
   }
 }
+
+
+
+

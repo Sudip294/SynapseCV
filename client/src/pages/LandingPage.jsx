@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import { useAuth } from '../context/AuthContext';
 import { 
   Sparkles, 
   FileText, 
@@ -16,28 +18,28 @@ import {
   Download,
   AlertCircle
 } from 'lucide-react';
-import toast from 'react-hot-toast';
+import { TemplateEngine } from '../components/templates/TemplateEngine';
 
 export const LandingPage = () => {
-  const [activeTab, setActiveTab] = useState('modern');
+  const [activeTab, setActiveTab] = useState('executive');
+  const navigate = useNavigate();
+  const { isAuthenticated, openAuthModal } = useAuth();
 
-  const handleAction = (featureName) => {
-    toast((t) => (
-      <div className="flex items-center gap-3">
-        <Sparkles className="w-5 h-5 text-brand-600 flex-shrink-0" />
-        <div>
-          <p className="font-semibold text-sm">Phase 1 Preview Mode</p>
-          <p className="text-xs text-slate-500">{featureName} will be enabled in subsequent build phases.</p>
-        </div>
-      </div>
-    ), { duration: 3500 });
+  const handleAction = (featureName, targetRoute = '/dashboard') => {
+    if (isAuthenticated) {
+      navigate(targetRoute);
+    } else {
+      openAuthModal('login', featureName);
+    }
   };
 
   const templates = [
-    { id: 'modern', name: 'Executive Modern', tag: 'Most Popular', color: 'bg-brand-600' },
-    { id: 'minimal', name: 'Minimalist Tech', tag: 'ATS Standard', color: 'bg-slate-800' },
-    { id: 'corporate', name: 'Corporate Leader', tag: 'High-Impact', color: 'bg-indigo-600' },
-    { id: 'creative', name: 'Product Innovator', tag: 'Clean Grid', color: 'bg-emerald-600' },
+    { id: 'executive', name: 'Executive Modern', tag: 'Most Popular' },
+    { id: 'minimal', name: 'Minimalist Tech', tag: 'ATS Standard' },
+    { id: 'corporate', name: 'Corporate Leader', tag: 'High-Impact' },
+    { id: 'creative', name: 'Product Innovator', tag: 'Clean Grid' },
+    { id: 'compact', name: 'Modern Compact', tag: '1-Page Dense' },
+    { id: 'academic', name: 'Academic Scholar', tag: 'Classic Serif' },
   ];
 
   return (
@@ -97,7 +99,7 @@ export const LandingPage = () => {
               </button>
 
               <button
-                onClick={() => handleAction('ATS Resume Analyzer')}
+                onClick={() => handleAction('ATS Resume Analyzer', '/analyzer')}
                 className="w-full sm:w-auto px-8 py-3.5 rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-800 font-semibold text-slate-800 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-850 transition-colors flex items-center justify-center gap-2 shadow-sm"
               >
                 <Target className="w-4 h-4 text-brand-600 dark:text-brand-400" />
@@ -420,25 +422,56 @@ export const LandingPage = () => {
                   <span className="flex items-center gap-1.5"><CheckCircle2 className="w-4 h-4 text-emerald-500"/> Vector PDF Render</span>
                 </div>
                 <button
-                  onClick={() => handleAction(`Use ${templates.find(t => t.id === activeTab)?.name} Template`)}
-                  className="mt-4 px-6 py-2.5 rounded-xl bg-slate-900 dark:bg-white text-white dark:text-slate-900 font-semibold text-sm hover:opacity-90 transition-opacity"
+                  onClick={() => {
+                    const selectedTpl = templates.find(t => t.id === activeTab);
+                    handleAction(`Use ${selectedTpl?.name} Template`, `/dashboard?template=${selectedTpl?.id}`);
+                  }}
+                  className="mt-4 px-6 py-2.5 rounded-xl bg-slate-900 dark:bg-white text-white dark:text-slate-900 font-semibold text-sm hover:opacity-90 transition-opacity shadow-md"
                 >
                   Use This Template
                 </button>
               </div>
 
-              <div className="bg-slate-100 dark:bg-slate-800 rounded-xl p-6 border border-slate-200 dark:border-slate-700 min-h-[300px] flex flex-col justify-between">
-                <div className="bg-white dark:bg-slate-900 p-5 rounded border border-slate-200 dark:border-slate-800 space-y-3">
-                  <div className="h-4 bg-slate-800 dark:bg-slate-200 rounded w-1/3"></div>
-                  <div className="h-3 bg-brand-500 rounded w-1/4"></div>
-                  <div className="space-y-1 pt-3">
-                    <div className="h-2 bg-slate-200 dark:bg-slate-700 rounded w-full"></div>
-                    <div className="h-2 bg-slate-200 dark:bg-slate-700 rounded w-5/6"></div>
-                    <div className="h-2 bg-slate-200 dark:bg-slate-700 rounded w-4/6"></div>
-                  </div>
+              {/* Template Visual Preview Container */}
+              <div className="bg-slate-100 dark:bg-slate-800 rounded-xl p-4 border border-slate-200 dark:border-slate-700 min-h-[340px] flex flex-col justify-between overflow-hidden">
+                <div className="bg-white dark:bg-slate-900 p-4 rounded-lg border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden max-h-[300px] scale-[0.85] origin-top">
+                  <TemplateEngine
+                    templateId={activeTab}
+                    resume={{
+                      personalInfo: {
+                        fullName: 'Alex Morgan',
+                        email: 'alex.m@example.com',
+                        phone: '+1 (555) 019-2834',
+                        location: 'San Francisco, CA',
+                        linkedin: 'linkedin.com/in/alexmorgan',
+                        github: 'github.com/alexmorgan',
+                        summary: 'Results-driven Senior Software Engineer with 6+ years of experience engineering high-throughput distributed systems and modern Web APIs.'
+                      },
+                      experience: [
+                        {
+                          id: '1',
+                          company: 'TechCorp Solutions',
+                          position: 'Senior Software Engineer',
+                          startDate: '2021-03',
+                          endDate: 'Present',
+                          current: true,
+                          description: 'Architected microservices infrastructure scaling to 10M+ daily requests. Improved API p99 latency by 45%.'
+                        }
+                      ],
+                      skills: ['React.js', 'Node.js', 'TypeScript', 'GraphQL', 'AWS / Kubernetes', 'PostgreSQL'],
+                      education: [
+                        {
+                          id: '1',
+                          institution: 'University of California, Berkeley',
+                          degree: 'B.S. Computer Science',
+                          endDate: '2020'
+                        }
+                      ]
+                    }}
+                  />
                 </div>
-                <div className="text-right text-xs text-slate-400 font-mono mt-4">
-                  Parsing Compatibility Score: <span className="text-emerald-500 font-bold">100% Passed</span>
+                <div className="text-right text-xs text-slate-500 dark:text-slate-400 font-mono mt-2 pt-2 border-t border-slate-200 dark:border-slate-700">
+                  Parsing Compatibility: <span className="text-emerald-500 font-bold">100% Passed</span>
                 </div>
               </div>
             </div>
@@ -457,13 +490,13 @@ export const LandingPage = () => {
               </p>
               <div className="pt-4 flex flex-col sm:flex-row items-center justify-center gap-4">
                 <button
-                  onClick={() => handleAction('Get Started Free')}
+                  onClick={() => handleAction('Get Started Free', '/dashboard')}
                   className="w-full sm:w-auto px-8 py-3.5 rounded-xl bg-white text-brand-700 hover:bg-slate-100 font-bold shadow-lg transition-colors"
                 >
                   Get Started for Free
                 </button>
                 <button
-                  onClick={() => handleAction('ATS Resume Analyzer')}
+                  onClick={() => handleAction('ATS Resume Analyzer', '/analyzer')}
                   className="w-full sm:w-auto px-8 py-3.5 rounded-xl bg-brand-800/60 hover:bg-brand-800/90 border border-brand-400/40 text-white font-semibold transition-colors"
                 >
                   Analyze My Resume

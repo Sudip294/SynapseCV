@@ -20,6 +20,19 @@ export const Navbar = () => {
     }
   };
 
+  const handleNavAnchor = (hash) => {
+    if (window.location.pathname !== '/') {
+      navigate('/' + hash);
+    } else {
+      const el = document.querySelector(hash);
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth' });
+      } else {
+        window.location.hash = hash;
+      }
+    }
+  };
+
   return (
     <header className="sticky top-0 z-50 backdrop-blur-md bg-white/80 dark:bg-slate-950/80 border-b border-slate-200/80 dark:border-slate-800/80 transition-colors">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
@@ -30,9 +43,12 @@ export const Navbar = () => {
 
         {/* Desktop Navigation */}
         <nav className="hidden md:flex items-center gap-8">
-          <a href="#features" className="text-sm font-medium text-slate-600 hover:text-brand-600 dark:text-slate-300 dark:hover:text-brand-400 transition-colors">
+          <button 
+            onClick={() => handleNavAnchor('#features')} 
+            className="text-sm font-medium text-slate-600 hover:text-brand-600 dark:text-slate-300 dark:hover:text-brand-400 transition-colors"
+          >
             Features
-          </a>
+          </button>
           <button 
             onClick={() => handleProtectedAction('Resume Builder', '/dashboard')} 
             className="text-sm font-medium text-slate-600 hover:text-brand-600 dark:text-slate-300 dark:hover:text-brand-400 transition-colors"
@@ -48,9 +64,12 @@ export const Navbar = () => {
               AI
             </span>
           </button>
-          <a href="#templates" className="text-sm font-medium text-slate-600 hover:text-brand-600 dark:text-slate-300 dark:hover:text-brand-400 transition-colors">
+          <button 
+            onClick={() => handleNavAnchor('#templates')} 
+            className="text-sm font-medium text-slate-600 hover:text-brand-600 dark:text-slate-300 dark:hover:text-brand-400 transition-colors"
+          >
             Templates
-          </a>
+          </button>
         </nav>
 
         {/* Desktop Actions */}
@@ -167,13 +186,12 @@ export const Navbar = () => {
       {/* Mobile Drawer Menu */}
       {isMobileMenuOpen && (
         <div className="md:hidden border-b border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 px-4 pt-2 pb-6 space-y-3">
-          <a
-            href="#features"
-            onClick={() => setIsMobileMenuOpen(false)}
-            className="block py-2 text-base font-medium text-slate-700 dark:text-slate-200"
+          <button
+            onClick={() => { setIsMobileMenuOpen(false); handleNavAnchor('#features'); }}
+            className="w-full text-left py-2 text-base font-medium text-slate-700 dark:text-slate-200"
           >
             Features
-          </a>
+          </button>
           <button
             onClick={() => { setIsMobileMenuOpen(false); handleProtectedAction('Resume Builder', '/dashboard'); }}
             className="w-full text-left py-2 text-base font-medium text-slate-700 dark:text-slate-200"

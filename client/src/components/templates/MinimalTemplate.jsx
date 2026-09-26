@@ -16,7 +16,7 @@ export const MinimalTemplate = ({ resume }) => {
   } = resume;
 
   return (
-    <div className="bg-white text-slate-900 p-8 sm:p-10 font-sans max-w-[800px] mx-auto min-h-[1050px] shadow-sm leading-normal">
+    <div className="bg-white text-slate-900 p-8 sm:p-10 font-sans max-w-[800px] mx-auto shadow-sm leading-normal">
       {/* HEADER */}
       <header className="mb-6 pb-4 border-b-2 border-slate-900">
         <h1 className="text-3xl font-extrabold text-slate-900 tracking-tight">

@@ -15,7 +15,7 @@ export const AcademicTemplate = ({ resume }) => {
   } = resume;
 
   return (
-    <div className="bg-white text-slate-900 p-8 sm:p-10 font-serif max-w-[800px] mx-auto min-h-[1050px] shadow-sm leading-normal">
+    <div className="bg-white text-slate-900 p-8 sm:p-10 font-serif max-w-[800px] mx-auto shadow-sm leading-normal">
       {/* HEADER */}
       <header className="text-center border-b border-slate-400 pb-4 mb-6">
         <h1 className="text-3xl font-bold uppercase tracking-wide text-slate-900 font-serif">

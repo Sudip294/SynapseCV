@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '../../context/AuthContext';
 import { SynapseLogo } from '../brand/SynapseLogo';
@@ -15,6 +16,7 @@ export const AuthModal = () => {
     register,
   } = useAuth();
 
+  const navigate = useNavigate();
   const [mode, setMode] = useState(authModalMode || 'login');
   const [showPassword, setShowPassword] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -26,7 +28,11 @@ export const AuthModal = () => {
     password: '',
   });
 
-  if (!authModalOpen) return null;
+  useEffect(() => {
+    if (authModalMode) {
+      setMode(authModalMode);
+    }
+  }, [authModalMode]);
 
   const handleChange = (e) => {
     setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
@@ -36,10 +42,19 @@ export const AuthModal = () => {
     e.preventDefault();
     setIsSubmitting(true);
 
+    let res;
     if (mode === 'login') {
-      await login(formData.email, formData.password);
+      res = await login(formData.email, formData.password);
     } else {
-      await register(formData.name, formData.email, formData.password);
+      res = await register(formData.name, formData.email, formData.password);
+    }
+
+    if (res?.success) {
+      if (pendingAction === 'ATS Resume Analyzer' || pendingAction === 'ATS Analyzer') {
+        navigate('/analyzer');
+      } else {
+        navigate('/dashboard');
+      }
     }
 
     setIsSubmitting(false);
@@ -52,17 +67,23 @@ export const AuthModal = () => {
 
   return (
     <AnimatePresence>
-      <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-sm">
+      {authModalOpen && (
         <motion.div
-          initial={{ opacity: 0, scale: 0.95, y: 10 }}
-          animate={{ opacity: 1, scale: 1, y: 0 }}
-          exit={{ opacity: 0, scale: 0.95, y: 10 }}
-          transition={{ duration: 0.2 }}
-          className="relative w-full max-w-md bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-2xl p-6 sm:p-8 text-slate-900 dark:text-white"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-sm"
         >
-          {/* Close Button */}
-          <button
-            onClick={closeAuthModal}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95, y: 10 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.95, y: 10 }}
+            transition={{ duration: 0.2 }}
+            className="relative w-full max-w-md bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-2xl p-6 sm:p-8 text-slate-900 dark:text-white"
+          >
+            {/* Close Button */}
+            <button
+              onClick={closeAuthModal}
             className="absolute top-4 right-4 p-1.5 rounded-lg text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
           >
             <X className="w-5 h-5" />
@@ -203,7 +224,8 @@ export const AuthModal = () => {
             By signing up, you agree to SynapseCV's Privacy Policy & Terms of Service.
           </p>
         </motion.div>
-      </div>
+        </motion.div>
+      )}
     </AnimatePresence>
   );
 };

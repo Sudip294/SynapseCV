@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import api from '../services/api';
 import { TemplateEngine } from '../components/templates/TemplateEngine';
@@ -78,8 +79,8 @@ export const ResumeBuilderPage = () => {
   };
 
   const handlePrint = () => {
-    toast.success('Opening print dialog... Select "Save as PDF" to download vector PDF.');
-    window.print();
+    toast.success('Print dialog opening... Choose "Save as PDF" to export.');
+    setTimeout(() => window.print(), 300);
   };
 
   const handleSelectTemplate = (templateId) => {
@@ -851,7 +852,10 @@ export const ResumeBuilderPage = () => {
             </div>
 
             {/* Paper Container */}
-            <div className="rounded-2xl border border-slate-200 dark:border-slate-800 shadow-xl overflow-hidden bg-slate-200 dark:bg-slate-900 p-4 max-h-[80vh] overflow-y-auto">
+            <div 
+              id="resume-preview" 
+              className="rounded-2xl border border-slate-200 dark:border-slate-800 shadow-xl overflow-hidden bg-slate-200 dark:bg-slate-900 p-4 max-h-[80vh] overflow-y-auto"
+            >
               <TemplateEngine resume={resume} templateId={resume.templateId} />
             </div>
           </div>
@@ -867,6 +871,14 @@ export const ResumeBuilderPage = () => {
         onSelectTemplate={handleSelectTemplate}
         resume={resume}
       />
+
+      {/* PRINT-ONLY RESUME — portaled to document.body so print CSS can isolate it perfectly */}
+      {createPortal(
+        <div id="resume-print-only">
+          <TemplateEngine resume={resume} templateId={resume.templateId} />
+        </div>,
+        document.body
+      )}
 
     </div>
   );

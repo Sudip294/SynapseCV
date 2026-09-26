@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate, Link, useSearchParams } from 'react-router-dom';
 import api from '../services/api';
 import { 
   Plus, 
@@ -21,7 +21,10 @@ export const DashboardPage = () => {
   const [loading, setLoading] = useState(true);
   const [creating, setCreating] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+  const [searchParams] = useSearchParams();
   const navigate = useNavigate();
+
+  const templateParam = searchParams.get('template');
 
   const fetchResumes = async () => {
     try {
@@ -40,11 +43,12 @@ export const DashboardPage = () => {
     fetchResumes();
   }, []);
 
-  const handleCreateResume = async () => {
+  const handleCreateResume = async (overrideTemplateId = null) => {
     setCreating(true);
     try {
       const res = await api.post('/resumes', {
         title: 'Software Engineer Resume',
+        templateId: overrideTemplateId || templateParam || 'executive',
       });
       if (res.data.success) {
         toast.success('New resume draft initialized!');
