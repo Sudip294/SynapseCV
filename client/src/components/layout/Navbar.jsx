@@ -133,6 +133,7 @@ export const Navbar = () => {
                     onClick={() => {
                       setIsUserMenuOpen(false);
                       logout();
+                      navigate('/');
                     }}
                     className="w-full flex items-center gap-2 px-4 py-2 text-xs font-medium text-rose-600 dark:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/40 transition-colors"
                   >
@@ -229,6 +230,7 @@ export const Navbar = () => {
                   onClick={() => {
                     setIsMobileMenuOpen(false);
                     logout();
+                    navigate('/');
                   }}
                   className="w-full py-2.5 text-center font-semibold text-rose-600 bg-rose-50 dark:bg-rose-950/40 rounded-xl"
                 >
