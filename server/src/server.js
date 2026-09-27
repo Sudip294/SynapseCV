@@ -1,5 +1,7 @@
-import express from 'express';
 import dotenv from 'dotenv';
+dotenv.config(); // Must be called BEFORE importing modules that depend on process.env
+
+import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
 import { connectDB } from './config/db.js';
@@ -7,8 +9,6 @@ import { errorHandler } from './middleware/errorHandler.js';
 import authRoutes from './routes/authRoutes.js';
 import resumeRoutes from './routes/resumeRoutes.js';
 import aiRoutes from './routes/aiRoutes.js';
-
-dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 5000;
