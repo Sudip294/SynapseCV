@@ -3,6 +3,9 @@ import { GoogleGenerativeAI } from '@google/generative-ai';
 const apiKey = process.env.GEMINI_API_KEY;
 const genAI = apiKey ? new GoogleGenerativeAI(apiKey) : null;
 
+// Working model name — updated to gemini-3.8-flash
+const GEMINI_MODEL = 'gemini-3.8-flash';
+
 // System instruction prompt to enforce zero hallucination
 const SYSTEM_INSTRUCTION = `You are SynapseCV's elite AI Resume Optimizer. 
 Rules you MUST strictly follow:
@@ -15,15 +18,11 @@ Rules you MUST strictly follow:
  */
 export const enhanceSummaryAI = async (summary, targetRole) => {
   if (!genAI) {
-    return {
-      enhancedSummary: summary
-        ? `${summary} Specialized in developing high-availability applications and aligning engineering deliverables with organizational targets.`
-        : `Results-driven ${targetRole || 'Professional'} with a proven track record of engineering scalable solutions and delivering high-impact business outcomes.`,
-    };
+    throw new Error('Gemini API key not configured. Please add GEMINI_API_KEY to your .env file.');
   }
 
   try {
-    const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
+    const model = genAI.getGenerativeModel({ model: GEMINI_MODEL });
     const prompt = `${SYSTEM_INSTRUCTION}
 
 Task: Enhance this resume executive summary for a target role of "${targetRole || 'Software Professional'}".
@@ -49,15 +48,11 @@ Return JSON format:
  */
 export const enhanceBulletAI = async (bulletText, position, targetRole) => {
   if (!genAI) {
-    return {
-      enhancedBullet: bulletText
-        ? bulletText.split('\n').map(b => b.trim() ? `• Scaled performance: ${b.replace(/^[•\-\*]\s*/, '')}` : '').join('\n')
-        : '• Spearheaded architectural design reducing system latency by 25% across microservices.\n• Collaborated with cross-functional teams to deploy features reaching 100k+ active users.',
-    };
+    throw new Error('Gemini API key not configured. Please add GEMINI_API_KEY to your .env file.');
   }
 
   try {
-    const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
+    const model = genAI.getGenerativeModel({ model: GEMINI_MODEL });
     const prompt = `${SYSTEM_INSTRUCTION}
 
 Task: Transform the following raw work experience text into high-impact, ATS-optimized action bullets for a "${position || targetRole}" position. Do not fabricate fake metrics; rephrase existing bullet points using strong action verbs (e.g. Architected, Engineered, Spearheaded).
@@ -85,14 +80,11 @@ Return JSON format:
  */
 export const suggestSkillsAI = async (targetRole, existingSkills = []) => {
   if (!genAI) {
-    const defaultSuggestions = ['TypeScript', 'Node.js', 'React', 'Docker', 'GraphQL', 'CI/CD', 'REST APIs', 'System Design'];
-    return {
-      suggestedSkills: defaultSuggestions.filter(s => !existingSkills.includes(s)),
-    };
+    throw new Error('Gemini API key not configured. Please add GEMINI_API_KEY to your .env file.');
   }
 
   try {
-    const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
+    const model = genAI.getGenerativeModel({ model: GEMINI_MODEL });
     const prompt = `${SYSTEM_INSTRUCTION}
 
 Task: Suggest 8-10 high-value technical and domain skills for a candidate targeting the role "${targetRole || 'Software Engineer'}".
@@ -118,18 +110,11 @@ Return JSON format:
  */
 export const generateDraftAI = async (targetRole, experienceLevel = 'Mid-Senior') => {
   if (!genAI) {
-    return {
-      title: `${targetRole} Resume`,
-      targetRole: targetRole,
-      summary: `Accomplished ${experienceLevel} ${targetRole} with expertise in building robust applications, optimizing technical workflows, and leading engineering initiatives.`,
-      skills: [
-        { category: 'Core Competencies', items: ['System Architecture', 'API Development', 'Database Optimization', 'Agile Methodologies'] },
-      ],
-    };
+    throw new Error('Gemini API key not configured. Please add GEMINI_API_KEY to your .env file.');
   }
 
   try {
-    const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
+    const model = genAI.getGenerativeModel({ model: GEMINI_MODEL });
     const prompt = `${SYSTEM_INSTRUCTION}
 
 Task: Generate a starter summary and skill categories template for a "${experienceLevel}" level candidate seeking a "${targetRole}" role.
@@ -156,48 +141,32 @@ Return JSON format:
 
 /**
  * Comprehensive Resume ATS Analysis using Gemini AI
+ * Accepts structured resumeData (from DB) or raw text extracted from PDF/DOCX
  */
 export const analyzeResumeAI = async (resumeData, jobDescription = '') => {
   if (!genAI) {
-    // Intelligent Fallback Analysis Response
-    return {
-      atsScore: 88,
-      matchPercentage: jobDescription ? 82 : null,
-      headline: 'Strong Candidate Profile with Excellent Technical Parsing',
-      detectedKeywords: ['JavaScript', 'React.js', 'Node.js', 'MongoDB', 'REST APIs', 'System Architecture', 'Git', 'Agile'],
-      missingKeywords: ['CI/CD Pipeline', 'Docker / Kubernetes', 'Unit Testing (Jest)', 'Cloud Infrastructure (AWS)'],
-      sectionAnalysis: {
-        summary: { score: 90, feedback: 'Well-structured executive overview highlighting technical focus.' },
-        experience: { score: 85, feedback: 'Strong bullet points. Consider adding more quantifiable percentage metrics.' },
-        skills: { score: 92, feedback: 'High domain keyword density across modern engineering frameworks.' },
-        education: { score: 86, feedback: 'Clear degree details and institution formatting.' }
-      },
-      issues: [
-        { severity: 'medium', category: 'Action Verbs', description: 'Some experience bullet points start with passive phrasing.', fix: 'Begin bullets with words like "Architected", "Engineered", or "Spearheaded".' },
-        { severity: 'low', category: 'Formatting', description: 'Contact section contains extra spaces.', fix: 'Ensure standardized bullet separators between email and location.' }
-      ],
-      actionableSuggestions: [
-        'Add 2-3 quantified metrics (e.g., "% latency reduction" or "x% throughput increase") in your experience section.',
-        'Include CI/CD and Cloud infrastructure keywords if applicable to your targeted roles.',
-        'Align summary explicitly with target job title keywords.'
-      ],
-      disclaimer: 'SynapseCV ATS score is an AI-based assessment designed for guidance and does not guarantee passing any specific employer\'s automated ATS filter.'
-    };
+    throw new Error('Gemini API key not configured. Please add GEMINI_API_KEY to your .env file.');
   }
 
   try {
-    const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
+    const model = genAI.getGenerativeModel({ model: GEMINI_MODEL });
+
+    // Convert structured resume object to readable text if needed
+    const resumeText = typeof resumeData === 'string'
+      ? resumeData
+      : buildResumeText(resumeData);
+
     const prompt = `${SYSTEM_INSTRUCTION}
 
 Task: Perform an in-depth ATS Resume Evaluation and keyword match analysis.
 
 Resume Content:
-${JSON.stringify(resumeData)}
+${resumeText}
 
 Target Job Description (Optional):
 "${jobDescription || 'General Software Engineering / Tech Role'}"
 
-Return JSON format strictly:
+Analyze the resume thoroughly and return JSON format strictly (no markdown fences):
 {
   "atsScore": 88,
   "matchPercentage": 82,
@@ -229,3 +198,75 @@ Return JSON format strictly:
     throw new Error('AI resume analysis failed: ' + error.message);
   }
 };
+
+/**
+ * Convert structured resume DB object to readable text for Gemini
+ */
+function buildResumeText(resumeData) {
+  if (!resumeData || typeof resumeData !== 'object') return String(resumeData);
+
+  const lines = [];
+
+  const p = resumeData.personalInfo || {};
+  if (p.fullName) lines.push(`Name: ${p.fullName}`);
+  if (p.email) lines.push(`Email: ${p.email}`);
+  if (p.phone) lines.push(`Phone: ${p.phone}`);
+  if (p.location) lines.push(`Location: ${p.location}`);
+  if (p.title) lines.push(`Title: ${p.title}`);
+  if (p.linkedin) lines.push(`LinkedIn: ${p.linkedin}`);
+  if (p.github) lines.push(`GitHub: ${p.github}`);
+  if (p.website) lines.push(`Website: ${p.website}`);
+
+  if (resumeData.summary) {
+    lines.push('\nPROFESSIONAL SUMMARY');
+    lines.push(resumeData.summary);
+  }
+
+  if (resumeData.experience?.length > 0) {
+    lines.push('\nWORK EXPERIENCE');
+    resumeData.experience.forEach((exp) => {
+      lines.push(`${exp.position || ''} at ${exp.company || ''} (${exp.startDate || ''} - ${exp.current ? 'Present' : exp.endDate || ''})`);
+      if (exp.location) lines.push(`  Location: ${exp.location}`);
+      if (exp.description) lines.push(`  ${exp.description}`);
+    });
+  }
+
+  if (resumeData.education?.length > 0) {
+    lines.push('\nEDUCATION');
+    resumeData.education.forEach((edu) => {
+      lines.push(`${edu.degree || ''} in ${edu.fieldOfStudy || ''} - ${edu.institution || ''} (${edu.startDate || ''} - ${edu.endDate || ''})`);
+      if (edu.gpa) lines.push(`  GPA: ${edu.gpa}`);
+    });
+  }
+
+  if (resumeData.skills?.length > 0) {
+    lines.push('\nSKILLS');
+    resumeData.skills.forEach((cat) => {
+      lines.push(`${cat.category || 'Skills'}: ${(cat.items || []).join(', ')}`);
+    });
+  }
+
+  if (resumeData.projects?.length > 0) {
+    lines.push('\nPROJECTS');
+    resumeData.projects.forEach((proj) => {
+      lines.push(`${proj.title || ''}: ${proj.description || ''}`);
+      if (proj.technologies?.length) lines.push(`  Tech: ${proj.technologies.join(', ')}`);
+    });
+  }
+
+  if (resumeData.certifications?.length > 0) {
+    lines.push('\nCERTIFICATIONS');
+    resumeData.certifications.forEach((cert) => {
+      lines.push(`${cert.name || ''} by ${cert.issuer || ''} (${cert.issueDate || ''})`);
+    });
+  }
+
+  if (resumeData.languages?.length > 0) {
+    lines.push('\nLANGUAGES');
+    resumeData.languages.forEach((lang) => {
+      lines.push(`${lang.language || ''}: ${lang.proficiency || ''}`);
+    });
+  }
+
+  return lines.join('\n');
+}

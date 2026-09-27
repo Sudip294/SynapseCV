@@ -3,24 +3,24 @@ import api from '../services/api';
 import { 
   Sparkles, 
   Target, 
-  BarChart3, 
   CheckCircle2, 
   AlertTriangle, 
   FileText, 
-  Search, 
+  Upload,
   Loader2, 
   Info,
-  Zap,
-  ShieldCheck,
   Tag,
-  ArrowRight,
-  AlertCircle
+  AlertCircle,
+  FileCheck,
+  X
 } from 'lucide-react';
 import toast from 'react-hot-toast';
 
 export const ResumeAnalyzerPage = () => {
+  const [inputMode, setInputMode] = useState('upload'); // 'upload' | 'select' | 'text'
   const [userResumes, setUserResumes] = useState([]);
   const [selectedResumeId, setSelectedResumeId] = useState('');
+  const [uploadedFile, setUploadedFile] = useState(null);
   const [rawText, setRawText] = useState('');
   const [jobDescription, setJobDescription] = useState('');
   const [loadingResumes, setLoadingResumes] = useState(true);
@@ -37,7 +37,7 @@ export const ResumeAnalyzerPage = () => {
           setSelectedResumeId(res.data.resumes[0]._id);
         }
       } catch (error) {
-        toast.error('Failed to load user resumes');
+        // user might not have saved resumes yet
       } finally {
         setLoadingResumes(false);
       }
@@ -45,34 +45,85 @@ export const ResumeAnalyzerPage = () => {
     fetchUserResumes();
   }, []);
 
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const ext = file.name.split('.').pop().toLowerCase();
+      if (!['pdf', 'docx', 'doc'].includes(ext)) {
+        toast.error('Only PDF and DOCX files are supported.');
+        return;
+      }
+      if (file.size > 10 * 1024 * 1024) {
+        toast.error('File size must be less than 10MB.');
+        return;
+      }
+      setUploadedFile(file);
+    }
+  };
+
   const handleAnalyze = async (e) => {
     e.preventDefault();
 
-    let payloadData = null;
-    if (selectedResumeId) {
-      const found = userResumes.find((r) => r._id === selectedResumeId);
-      payloadData = found || { rawText };
-    } else {
-      if (!rawText.trim()) {
-        toast.error('Please select a resume or paste resume text to analyze.');
-        return;
-      }
-      payloadData = { rawText };
-    }
-
     setAnalyzing(true);
-    try {
-      const res = await api.post('/ai/analyze-resume', {
-        resumeData: payloadData,
-        jobDescription,
-      });
+    setAnalysisResult(null);
 
-      if (res.data.success) {
-        setAnalysisResult(res.data.data);
-        toast.success('ATS Analysis complete!');
+    try {
+      if (inputMode === 'upload') {
+        if (!uploadedFile) {
+          toast.error('Please select a PDF or DOCX file to upload.');
+          setAnalyzing(false);
+          return;
+        }
+
+        const formData = new FormData();
+        formData.append('resume', uploadedFile);
+        formData.append('jobDescription', jobDescription);
+
+        const res = await api.post('/ai/analyze-resume-file', formData, {
+          headers: { 'Content-Type': 'multipart/form-data' },
+        });
+
+        if (res.data.success) {
+          setAnalysisResult(res.data.data);
+          toast.success('Resume file analyzed successfully with AI!');
+        }
+      } else if (inputMode === 'select') {
+        if (!selectedResumeId) {
+          toast.error('Please select a saved resume.');
+          setAnalyzing(false);
+          return;
+        }
+
+        const found = userResumes.find((r) => r._id === selectedResumeId);
+        const res = await api.post('/ai/analyze-resume', {
+          resumeData: found,
+          jobDescription,
+        });
+
+        if (res.data.success) {
+          setAnalysisResult(res.data.data);
+          toast.success('Saved resume analyzed successfully with AI!');
+        }
+      } else {
+        if (!rawText.trim()) {
+          toast.error('Please paste your resume text.');
+          setAnalyzing(false);
+          return;
+        }
+
+        const res = await api.post('/ai/analyze-resume', {
+          resumeData: { rawText },
+          jobDescription,
+        });
+
+        if (res.data.success) {
+          setAnalysisResult(res.data.data);
+          toast.success('Resume text analyzed successfully with AI!');
+        }
       }
     } catch (error) {
-      toast.error('AI Analysis failed. Please try again.');
+      const errorMsg = error.response?.data?.message || 'AI Analysis failed. Please try again.';
+      toast.error(errorMsg);
     } finally {
       setAnalyzing(false);
     }
@@ -91,7 +142,7 @@ export const ResumeAnalyzerPage = () => {
       <div className="text-center max-w-3xl mx-auto space-y-3">
         <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-brand-50 dark:bg-brand-950/80 border border-brand-200 dark:border-brand-800 text-brand-700 dark:text-brand-300 text-xs font-semibold">
           <Sparkles className="w-4 h-4 text-brand-600 dark:text-brand-400" />
-          <span>Gemini-Powered ATS Parsing & Match Evaluator</span>
+          <span>Gemini AI ATS Resume Analyzer & Job Description Matcher</span>
         </div>
 
         <h1 className="text-3xl sm:text-4xl font-extrabold text-slate-900 dark:text-white tracking-tight">
@@ -99,7 +150,7 @@ export const ResumeAnalyzerPage = () => {
         </h1>
         
         <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
-          Evaluate your resume against industry Applicant Tracking Systems, uncover missing technical keywords, and match against job descriptions.
+          Upload your PDF/DOCX resume or select a saved resume to evaluate against Applicant Tracking Systems (ATS), identify missing keywords, and match with target job descriptions.
         </p>
       </div>
 
@@ -109,44 +160,125 @@ export const ResumeAnalyzerPage = () => {
         <form onSubmit={handleAnalyze} className="space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             
-            {/* Left Box: Resume Selection / Input */}
+            {/* Left Box: Resume Selection / Upload */}
             <div className="space-y-3">
-              <label className="text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300 flex items-center gap-2">
-                <FileText className="w-4 h-4 text-brand-600" /> Select Resume
+              <label className="text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300 flex items-center justify-between">
+                <span className="flex items-center gap-2"><FileText className="w-4 h-4 text-brand-600" /> Resume Source</span>
               </label>
 
-              {userResumes.length > 0 ? (
-                <div className="space-y-2">
-                  <select
-                    value={selectedResumeId}
-                    onChange={(e) => setSelectedResumeId(e.target.value)}
-                    className="w-full px-4 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-sm font-semibold"
-                  >
-                    {userResumes.map((r) => (
-                      <option key={r._id} value={r._id}>
-                        {r.title} ({r.targetRole || 'Software Engineering'})
-                      </option>
-                    ))}
-                    <option value="">Paste Plain Resume Text</option>
-                  </select>
+              {/* Input Mode Selector */}
+              <div className="grid grid-cols-3 gap-1.5 p-1 bg-slate-100 dark:bg-slate-800 rounded-xl text-xs font-semibold">
+                <button
+                  type="button"
+                  onClick={() => setInputMode('upload')}
+                  className={`py-2 rounded-lg transition-all flex items-center justify-center gap-1 ${
+                    inputMode === 'upload'
+                      ? 'bg-white dark:bg-slate-900 text-brand-600 dark:text-brand-400 shadow-sm'
+                      : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+                  }`}
+                >
+                  <Upload className="w-3.5 h-3.5" />
+                  <span>Upload File</span>
+                </button>
 
-                  {!selectedResumeId && (
-                    <textarea
-                      rows={5}
-                      placeholder="Paste your full resume text here..."
-                      value={rawText}
-                      onChange={(e) => setRawText(e.target.value)}
-                      className="w-full p-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs"
+                <button
+                  type="button"
+                  onClick={() => setInputMode('select')}
+                  className={`py-2 rounded-lg transition-all flex items-center justify-center gap-1 ${
+                    inputMode === 'select'
+                      ? 'bg-white dark:bg-slate-900 text-brand-600 dark:text-brand-400 shadow-sm'
+                      : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+                  }`}
+                >
+                  <FileText className="w-3.5 h-3.5" />
+                  <span>Saved Resume</span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => setInputMode('text')}
+                  className={`py-2 rounded-lg transition-all flex items-center justify-center gap-1 ${
+                    inputMode === 'text'
+                      ? 'bg-white dark:bg-slate-900 text-brand-600 dark:text-brand-400 shadow-sm'
+                      : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+                  }`}
+                >
+                  <Sparkles className="w-3.5 h-3.5" />
+                  <span>Paste Text</span>
+                </button>
+              </div>
+
+              {/* Upload File Mode */}
+              {inputMode === 'upload' && (
+                <div className="space-y-2">
+                  <div className="relative border-2 border-dashed border-slate-300 dark:border-slate-700 hover:border-brand-500 dark:hover:border-brand-500 rounded-xl p-6 text-center transition-all bg-slate-50/50 dark:bg-slate-850/50">
+                    <input
+                      type="file"
+                      accept=".pdf,.docx,.doc"
+                      onChange={handleFileChange}
+                      className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
                     />
+                    {uploadedFile ? (
+                      <div className="flex items-center justify-between bg-white dark:bg-slate-800 p-3 rounded-lg border border-brand-200 dark:border-brand-800 text-left">
+                        <div className="flex items-center gap-2.5 overflow-hidden">
+                          <FileCheck className="w-5 h-5 text-emerald-500 flex-shrink-0" />
+                          <div className="truncate">
+                            <p className="text-xs font-semibold text-slate-800 dark:text-slate-200 truncate">{uploadedFile.name}</p>
+                            <p className="text-[10px] text-slate-400">{(uploadedFile.size / 1024).toFixed(1)} KB</p>
+                          </div>
+                        </div>
+                        <button
+                          type="button"
+                          onClick={(e) => { e.stopPropagation(); setUploadedFile(null); }}
+                          className="p-1 hover:bg-slate-100 dark:hover:bg-slate-700 rounded text-slate-400 hover:text-rose-500"
+                        >
+                          <X className="w-4 h-4" />
+                        </button>
+                      </div>
+                    ) : (
+                      <div className="space-y-2">
+                        <Upload className="w-8 h-8 text-slate-400 mx-auto" />
+                        <p className="text-xs font-medium text-slate-700 dark:text-slate-300">
+                          Click or drag & drop to upload <span className="font-bold text-brand-600">PDF</span> or <span className="font-bold text-brand-600">DOCX</span>
+                        </p>
+                        <p className="text-[10px] text-slate-400">Max file size: 10MB</p>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
+
+              {/* Select Saved Resume Mode */}
+              {inputMode === 'select' && (
+                <div className="space-y-2">
+                  {userResumes.length > 0 ? (
+                    <select
+                      value={selectedResumeId}
+                      onChange={(e) => setSelectedResumeId(e.target.value)}
+                      className="w-full px-4 py-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs font-semibold text-slate-900 dark:text-white"
+                    >
+                      {userResumes.map((r) => (
+                        <option key={r._id} value={r._id}>
+                          {r.title} ({r.targetRole || 'Software Engineering'})
+                        </option>
+                      ))}
+                    </select>
+                  ) : (
+                    <p className="text-xs text-amber-600 dark:text-amber-400 p-3 rounded-xl bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-900">
+                      No saved resumes found. Switch to File Upload or Paste Text.
+                    </p>
                   )}
                 </div>
-              ) : (
+              )}
+
+              {/* Paste Text Mode */}
+              {inputMode === 'text' && (
                 <textarea
                   rows={5}
                   placeholder="Paste your full resume text here..."
                   value={rawText}
                   onChange={(e) => setRawText(e.target.value)}
-                  className="w-full p-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs"
+                  className="w-full p-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs text-slate-900 dark:text-white"
                 />
               )}
             </div>
@@ -160,7 +292,7 @@ export const ResumeAnalyzerPage = () => {
 
               <textarea
                 rows={5}
-                placeholder="Paste job posting text to analyze missing keywords and calculate match percentage..."
+                placeholder="Paste job posting text here to analyze missing keywords and calculate match percentage..."
                 value={jobDescription}
                 onChange={(e) => setJobDescription(e.target.value)}
                 className="w-full p-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs text-slate-900 dark:text-white"
@@ -178,7 +310,7 @@ export const ResumeAnalyzerPage = () => {
               {analyzing ? (
                 <>
                   <Loader2 className="w-5 h-5 animate-spin" />
-                  <span>Evaluating ATS Metrics...</span>
+                  <span>Analyzing Resume with Gemini AI...</span>
                 </>
               ) : (
                 <>
@@ -197,12 +329,14 @@ export const ResumeAnalyzerPage = () => {
         <div className="space-y-8 animate-fade-in">
           
           {/* DISCLAIMER NOTICE BANNER */}
-          <div className="p-4 rounded-xl bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-900 flex items-start gap-3">
-            <Info className="w-5 h-5 text-amber-600 dark:text-amber-400 flex-shrink-0 mt-0.5" />
-            <p className="text-xs text-amber-800 dark:text-amber-200 leading-relaxed">
-              {analysisResult.disclaimer}
-            </p>
-          </div>
+          {analysisResult.disclaimer && (
+            <div className="p-4 rounded-xl bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-900 flex items-start gap-3">
+              <Info className="w-5 h-5 text-amber-600 dark:text-amber-400 flex-shrink-0 mt-0.5" />
+              <p className="text-xs text-amber-800 dark:text-amber-200 leading-relaxed">
+                {analysisResult.disclaimer}
+              </p>
+            </div>
+          )}
 
           {/* OVERALL SCORE DASHBOARD HEADER */}
           <div className="p-6 sm:p-8 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-md grid grid-cols-1 md:grid-cols-12 gap-6 items-center">
@@ -218,7 +352,7 @@ export const ResumeAnalyzerPage = () => {
 
             {/* Headline & Details */}
             <div className="md:col-span-8 space-y-3 text-center md:text-left">
-              {analysisResult.matchPercentage && (
+              {analysisResult.matchPercentage !== undefined && analysisResult.matchPercentage !== null && (
                 <span className="px-3 py-1 rounded-full text-xs font-bold bg-brand-100 text-brand-800 dark:bg-brand-950 dark:text-brand-300">
                   Target Job Match: {analysisResult.matchPercentage}%
                 </span>
