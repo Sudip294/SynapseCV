@@ -1,7 +1,7 @@
 import { User } from '../models/User.js';
 import { Resume } from '../models/Resume.js';
 import { generateToken } from '../middleware/authMiddleware.js';
-import { sendWelcomeEmail, sendAccountDeletedEmail } from '../services/emailService.js';
+import { sendWelcomeEmail, sendAccountDeletedEmail, sendPasswordResetOTPEmail } from '../services/emailService.js';
 
 // @desc    Register a new user
 // @route   POST /api/auth/register
@@ -266,3 +266,89 @@ export const deleteAccount = async (req, res, next) => {
     next(error);
   }
 };
+
+// @desc    Send OTP for password reset
+// @route   POST /api/auth/forgot-password
+// @access  Public
+export const forgotPassword = async (req, res, next) => {
+  try {
+    const { email } = req.body;
+
+    if (!email) {
+      return res.status(400).json({ success: false, message: 'Please enter your email address' });
+    }
+
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(440 || 404).json({ success: false, message: 'No account found with this email address' });
+    }
+
+    // Generate 6-digit numeric OTP
+    const otp = Math.floor(100000 + Math.random() * 900000).toString();
+    const otpExpire = new Date(Date.now() + 10 * 60 * 1000); // 10 minutes
+
+    user.resetOTP = otp;
+    user.resetOTPExpire = otpExpire;
+    await user.save();
+
+    // Send email
+    sendPasswordResetOTPEmail(user.email, otp, user.name);
+
+    res.json({
+      success: true,
+      message: 'OTP sent to your email address',
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+// @desc    Verify OTP and reset password
+// @route   POST /api/auth/reset-password
+// @access  Public
+export const resetPassword = async (req, res, next) => {
+  try {
+    const { email, otp, newPassword, confirmPassword } = req.body;
+
+    if (!email || !otp || !newPassword || !confirmPassword) {
+      return res.status(400).json({ success: false, message: 'Please fill in all fields' });
+    }
+
+    if (newPassword !== confirmPassword) {
+      return res.status(400).json({ success: false, message: 'New password and confirm password do not match' });
+    }
+
+    if (newPassword.length < 6) {
+      return res.status(400).json({ success: false, message: 'Password must be at least 6 characters long' });
+    }
+
+    const user = await User.findOne({ email });
+
+    if (!user) {
+      return res.status(404).json({ success: false, message: 'User not found' });
+    }
+
+    if (!user.resetOTP || user.resetOTP !== otp) {
+      return res.status(400).json({ success: false, message: 'Invalid OTP code' });
+    }
+
+    if (user.resetOTPExpire && user.resetOTPExpire < new Date()) {
+      return res.status(400).json({ success: false, message: 'OTP code has expired. Please request a new one.' });
+    }
+
+    // Update password & clear OTP fields
+    user.password = newPassword;
+    user.resetOTP = null;
+    user.resetOTPExpire = null;
+
+    await user.save();
+
+    res.json({
+      success: true,
+      message: 'Password reset successful! You can now sign in with your new password.',
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
