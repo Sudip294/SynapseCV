@@ -188,33 +188,11 @@ export const LandingPage = () => {
               </div>
             </div>
 
-            {/* Graphic Showcase: Vector Hero Graphic + Dashboard Grid */}
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
-              
-              {/* Left Side: Modern Vector Graphic Illustration */}
-              <div className="lg:col-span-5 relative flex justify-center items-center p-2 bg-gradient-to-b from-slate-100 to-slate-200/60 dark:from-slate-800/80 dark:to-slate-850/80 rounded-xl border border-slate-200/80 dark:border-slate-750 overflow-hidden shadow-inner group/img">
-                <img 
-                  src="/resume_hero_illustration.png" 
-                  alt="SynapseCV AI Resume Builder & ATS Vector Graphic" 
-                  className="w-full h-auto max-h-[300px] object-contain rounded-lg transition-transform duration-500 group-hover/img:scale-105"
-                />
-                
-                {/* Floating Micro Badge Overlay */}
-                <motion.div 
-                  animate={{ y: [0, -6, 0] }}
-                  transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
-                  className="absolute top-4 right-4 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md px-3 py-1.5 rounded-xl border border-brand-200 dark:border-brand-800/80 shadow-lg flex items-center gap-2 text-xs font-bold text-brand-600 dark:text-brand-400"
-                >
-                  <TrendingUp className="w-4 h-4 text-emerald-500" />
-                  <span>98% ATS Match</span>
-                </motion.div>
-              </div>
-
-              {/* Right Side: Interactive Mockup Grid */}
+            {/* Dashboard Mockup Grid */}
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+              {/* Left Column: Form & Editor Mockup */}
               <div className="lg:col-span-7 space-y-4">
-                
-                {/* Profile Header */}
-                <div className="flex items-center justify-between bg-slate-100/80 dark:bg-slate-850/90 p-3.5 rounded-xl border border-slate-200/60 dark:border-slate-800">
+                <div className="flex items-center justify-between bg-slate-100 dark:bg-slate-850 p-3.5 rounded-xl border border-slate-200/60 dark:border-slate-800">
                   <div className="flex items-center gap-3">
                     <div className="w-10 h-10 rounded-full bg-gradient-to-br from-brand-500 to-indigo-600 text-white font-bold flex items-center justify-center text-sm shadow-md">
                       JD
@@ -229,7 +207,7 @@ export const LandingPage = () => {
                   </span>
                 </div>
 
-                {/* Simulated AI Suggestion Card with Micro-Animation */}
+                {/* Simulated AI Suggestion Card */}
                 <motion.div 
                   whileHover={{ x: 4 }}
                   className="p-4 rounded-xl border border-brand-200 dark:border-brand-800/70 bg-brand-50/60 dark:bg-brand-950/40 space-y-2 shadow-sm transition-all"
@@ -256,8 +234,51 @@ export const LandingPage = () => {
                     <span className="text-slate-700 dark:text-slate-300">Technical Skills</span>
                     <span className="text-brand-600 dark:text-brand-400 font-mono">18 tags</span>
                   </div>
+                  <div className="p-3 rounded-xl bg-slate-100/70 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-800 flex items-center justify-between">
+                    <span className="text-slate-700 dark:text-slate-300">Education & Certs</span>
+                    <span className="text-brand-600 dark:text-brand-400 font-mono">3 verified</span>
+                  </div>
+                  <div className="p-3 rounded-xl bg-slate-100/70 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-800 flex items-center justify-between">
+                    <span className="text-slate-700 dark:text-slate-300">Projects & Impact</span>
+                    <span className="text-brand-600 dark:text-brand-400 font-mono">2 links</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Right Column: Live Resume Preview Sheet Mockup */}
+              <div className="lg:col-span-5 bg-slate-100 dark:bg-slate-800 rounded-xl p-4 border border-slate-200 dark:border-slate-700 flex flex-col justify-between shadow-inner">
+                <div className="bg-white dark:bg-slate-900 rounded-lg p-4 shadow-sm border border-slate-200/80 dark:border-slate-800 space-y-3 font-sans">
+                  <div className="border-b border-slate-200 dark:border-slate-800 pb-2">
+                    <h3 className="font-bold text-sm text-slate-900 dark:text-white">JANE DOE</h3>
+                    <p className="text-[11px] text-brand-600 dark:text-brand-400 font-medium">Senior Staff Software Engineer • San Francisco, CA</p>
+                  </div>
+                  <div className="space-y-1">
+                    <p className="text-[10px] font-bold text-slate-400 uppercase">Executive Summary</p>
+                    <div className="h-2 bg-slate-200 dark:bg-slate-700 rounded w-full"></div>
+                    <div className="h-2 bg-slate-200 dark:bg-slate-700 rounded w-5/6"></div>
+                  </div>
+                  <div className="space-y-1.5 pt-1">
+                    <p className="text-[10px] font-bold text-slate-400 uppercase">Core Stack & Skills</p>
+                    <div className="flex flex-wrap gap-1">
+                      <span className="px-1.5 py-0.5 rounded text-[9px] bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300">Distributed Systems</span>
+                      <span className="px-1.5 py-0.5 rounded text-[9px] bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300">React.js</span>
+                      <span className="px-1.5 py-0.5 rounded text-[9px] bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300">Node.js</span>
+                      <span className="px-1.5 py-0.5 rounded text-[9px] bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300">AWS / K8s</span>
+                    </div>
+                  </div>
                 </div>
 
+                <div className="mt-4 flex items-center justify-between text-xs text-slate-500 font-medium">
+                  <span className="flex items-center gap-1">
+                    <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500" /> Executive Template #1
+                  </span>
+                  <button 
+                    onClick={() => handleAction('PDF Export')} 
+                    className="text-xs font-semibold text-brand-600 dark:text-brand-400 hover:underline flex items-center gap-1 cursor-pointer"
+                  >
+                    <Download className="w-3.5 h-3.5" /> Preview PDF
+                  </button>
+                </div>
               </div>
             </div>
           </motion.div>
