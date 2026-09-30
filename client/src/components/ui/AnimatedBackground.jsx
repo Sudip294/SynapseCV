@@ -178,7 +178,7 @@ export const AnimatedBackground = ({ isDark = false }) => {
   return (
     <canvas
       ref={canvasRef}
-      className="fixed inset-0 -z-10 pointer-events-none"
+      className="fixed inset-0 z-0 pointer-events-none bg-slate-50 dark:bg-slate-950"
       style={{ width: '100vw', height: '100vh' }}
     />
   );

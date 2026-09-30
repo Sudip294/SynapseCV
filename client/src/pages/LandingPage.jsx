@@ -80,12 +80,12 @@ export const LandingPage = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 overflow-hidden selection:bg-brand-500 selection:text-white relative">
+    <div className="min-h-screen text-slate-900 dark:text-slate-100 overflow-hidden selection:bg-brand-500 selection:text-white relative">
 
       {/* ✦ Canvas Particle Network - Scroll & Mouse Reactive ✦ */}
       <AnimatedBackground isDark={isDark} />
 
-      <div className="relative">
+      <div className="relative z-10">
         {/* HERO SECTION */}
         <section className="pt-16 pb-20 md:pt-24 md:pb-28 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
           <div className="text-center max-w-4xl mx-auto space-y-6">
