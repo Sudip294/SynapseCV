@@ -2,19 +2,19 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useAuth } from '../context/AuthContext';
-import { 
-  Sparkles, 
-  FileText, 
-  Target, 
-  CheckCircle2, 
-  Zap, 
-  Shield, 
-  ArrowRight, 
-  Layout, 
-  BarChart3, 
-  Briefcase, 
-  Layers, 
-  Star, 
+import {
+  Sparkles,
+  FileText,
+  Target,
+  CheckCircle2,
+  Zap,
+  Shield,
+  ArrowRight,
+  Layout,
+  BarChart3,
+  Briefcase,
+  Layers,
+  Star,
   Download,
   AlertCircle,
   TrendingUp,
@@ -80,15 +80,15 @@ export const LandingPage = () => {
         {/* HERO SECTION */}
         <section className="pt-16 pb-20 md:pt-24 md:pb-28 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
           <div className="text-center max-w-4xl mx-auto space-y-6">
-            
-            {/* Animated Badge */}
+
+            {/* Badge */}
             <motion.div
-              initial={{ opacity: 0, scale: 0.9, y: -10 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}
-              className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-brand-50/90 dark:bg-brand-950/80 border border-brand-200/80 dark:border-brand-800/80 text-brand-700 dark:text-brand-300 text-xs font-semibold tracking-wide shadow-sm hover:scale-105 transition-transform cursor-pointer"
+              className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-brand-50 dark:bg-brand-950/80 border border-brand-200 dark:border-brand-800 text-brand-700 dark:text-brand-300 text-xs font-semibold tracking-wide"
             >
-              <Sparkles className="w-4 h-4 text-brand-600 dark:text-brand-400 animate-spin" style={{ animationDuration: '4s' }} />
+              <Sparkles className="w-4 h-4 text-brand-600 dark:text-brand-400 animate-pulse" />
               <span>Next-Generation Resume Engine Powered by Gemini AI</span>
             </motion.div>
 
@@ -208,7 +208,7 @@ export const LandingPage = () => {
                 </div>
 
                 {/* Simulated AI Suggestion Card */}
-                <motion.div 
+                <motion.div
                   whileHover={{ x: 4 }}
                   className="p-4 rounded-xl border border-brand-200 dark:border-brand-800/70 bg-brand-50/60 dark:bg-brand-950/40 space-y-2 shadow-sm transition-all"
                 >
@@ -272,8 +272,8 @@ export const LandingPage = () => {
                   <span className="flex items-center gap-1">
                     <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500" /> Executive Template #1
                   </span>
-                  <button 
-                    onClick={() => handleAction('PDF Export')} 
+                  <button
+                    onClick={() => handleAction('PDF Export')}
                     className="text-xs font-semibold text-brand-600 dark:text-brand-400 hover:underline flex items-center gap-1 cursor-pointer"
                   >
                     <Download className="w-3.5 h-3.5" /> Preview PDF
@@ -287,8 +287,8 @@ export const LandingPage = () => {
         {/* FEATURES GRID SECTION */}
         <section id="features" className="py-24 bg-white dark:bg-slate-900 border-y border-slate-200 dark:border-slate-800 transition-colors relative">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            
-            <motion.div 
+
+            <motion.div
               initial="hidden"
               whileInView="visible"
               viewport={{ once: true, margin: '-100px' }}
@@ -307,16 +307,16 @@ export const LandingPage = () => {
             </motion.div>
 
             {/* Feature Cards Staggered Grid */}
-            <motion.div 
+            <motion.div
               initial="hidden"
               whileInView="visible"
               viewport={{ once: true, margin: '-50px' }}
               variants={staggerContainer}
               className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
             >
-              
+
               {/* Feature 1 */}
-              <motion.div 
+              <motion.div
                 variants={fadeInUp}
                 whileHover={{ y: -6, transition: { duration: 0.2 } }}
                 className="p-7 rounded-2xl bg-slate-50 dark:bg-slate-850 border border-slate-200 dark:border-slate-800 space-y-4 hover:border-brand-500/50 hover:shadow-xl dark:hover:shadow-brand-950/30 transition-all group cursor-pointer"
@@ -331,7 +331,7 @@ export const LandingPage = () => {
               </motion.div>
 
               {/* Feature 2 */}
-              <motion.div 
+              <motion.div
                 variants={fadeInUp}
                 whileHover={{ y: -6, transition: { duration: 0.2 } }}
                 className="p-7 rounded-2xl bg-slate-50 dark:bg-slate-850 border border-slate-200 dark:border-slate-800 space-y-4 hover:border-cyan-500/50 hover:shadow-xl dark:hover:shadow-cyan-950/30 transition-all group cursor-pointer"
@@ -346,7 +346,7 @@ export const LandingPage = () => {
               </motion.div>
 
               {/* Feature 3 */}
-              <motion.div 
+              <motion.div
                 variants={fadeInUp}
                 whileHover={{ y: -6, transition: { duration: 0.2 } }}
                 className="p-7 rounded-2xl bg-slate-50 dark:bg-slate-850 border border-slate-200 dark:border-slate-800 space-y-4 hover:border-indigo-500/50 hover:shadow-xl dark:hover:shadow-indigo-950/30 transition-all group cursor-pointer"
@@ -361,7 +361,7 @@ export const LandingPage = () => {
               </motion.div>
 
               {/* Feature 4 */}
-              <motion.div 
+              <motion.div
                 variants={fadeInUp}
                 whileHover={{ y: -6, transition: { duration: 0.2 } }}
                 className="p-7 rounded-2xl bg-slate-50 dark:bg-slate-850 border border-slate-200 dark:border-slate-800 space-y-4 hover:border-emerald-500/50 hover:shadow-xl dark:hover:shadow-emerald-950/30 transition-all group cursor-pointer"
@@ -376,7 +376,7 @@ export const LandingPage = () => {
               </motion.div>
 
               {/* Feature 5 */}
-              <motion.div 
+              <motion.div
                 variants={fadeInUp}
                 whileHover={{ y: -6, transition: { duration: 0.2 } }}
                 className="p-7 rounded-2xl bg-slate-50 dark:bg-slate-850 border border-slate-200 dark:border-slate-800 space-y-4 hover:border-amber-500/50 hover:shadow-xl dark:hover:shadow-amber-950/30 transition-all group cursor-pointer"
@@ -391,7 +391,7 @@ export const LandingPage = () => {
               </motion.div>
 
               {/* Feature 6 */}
-              <motion.div 
+              <motion.div
                 variants={fadeInUp}
                 whileHover={{ y: -6, transition: { duration: 0.2 } }}
                 className="p-7 rounded-2xl bg-slate-50 dark:bg-slate-850 border border-slate-200 dark:border-slate-800 space-y-4 hover:border-purple-500/50 hover:shadow-xl dark:hover:shadow-purple-950/30 transition-all group cursor-pointer"
@@ -411,7 +411,7 @@ export const LandingPage = () => {
 
         {/* HOW IT WORKS SECTION */}
         <section className="py-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.div 
+          <motion.div
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, margin: '-100px' }}
@@ -426,14 +426,14 @@ export const LandingPage = () => {
             </h2>
           </motion.div>
 
-          <motion.div 
+          <motion.div
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, margin: '-50px' }}
             variants={staggerContainer}
             className="grid grid-cols-1 md:grid-cols-3 gap-8 relative"
           >
-            <motion.div 
+            <motion.div
               variants={fadeInUp}
               whileHover={{ y: -6 }}
               className="p-8 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-center space-y-4 shadow-lg hover:shadow-xl transition-all relative group"
@@ -447,7 +447,7 @@ export const LandingPage = () => {
               </p>
             </motion.div>
 
-            <motion.div 
+            <motion.div
               variants={fadeInUp}
               whileHover={{ y: -6 }}
               className="p-8 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-center space-y-4 shadow-lg hover:shadow-xl transition-all relative group"
@@ -461,7 +461,7 @@ export const LandingPage = () => {
               </p>
             </motion.div>
 
-            <motion.div 
+            <motion.div
               variants={fadeInUp}
               whileHover={{ y: -6 }}
               className="p-8 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-center space-y-4 shadow-lg hover:shadow-xl transition-all relative group"
@@ -494,11 +494,10 @@ export const LandingPage = () => {
                   <button
                     key={tpl.id}
                     onClick={() => setActiveTab(tpl.id)}
-                    className={`px-4 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition-all cursor-pointer ${
-                      activeTab === tpl.id
-                        ? 'bg-brand-600 text-white shadow-lg shadow-brand-600/30 scale-105'
-                        : 'bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-750'
-                    }`}
+                    className={`px-4 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition-all cursor-pointer ${activeTab === tpl.id
+                      ? 'bg-brand-600 text-white shadow-lg shadow-brand-600/30 scale-105'
+                      : 'bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-750'
+                      }`}
                   >
                     {tpl.name}
                   </button>
@@ -507,7 +506,7 @@ export const LandingPage = () => {
             </div>
 
             {/* Selected Template Card Teaser */}
-            <motion.div 
+            <motion.div
               key={activeTab}
               initial={{ opacity: 0, x: 20 }}
               animate={{ opacity: 1, x: 0 }}
@@ -525,9 +524,9 @@ export const LandingPage = () => {
                   Engineered with standard section header tags, single-column font hierarchies, and zero non-standard graphic layers to ensure 100% readability across Taleo, Workday, and Greenhouse ATS systems.
                 </p>
                 <div className="pt-2 flex flex-wrap gap-3 text-xs font-semibold text-slate-600 dark:text-slate-400">
-                  <span className="flex items-center gap-1.5"><CheckCircle2 className="w-4 h-4 text-emerald-500"/> Single / Multi Page Support</span>
-                  <span className="flex items-center gap-1.5"><CheckCircle2 className="w-4 h-4 text-emerald-500"/> Customizable Accent Colors</span>
-                  <span className="flex items-center gap-1.5"><CheckCircle2 className="w-4 h-4 text-emerald-500"/> Vector PDF Render</span>
+                  <span className="flex items-center gap-1.5"><CheckCircle2 className="w-4 h-4 text-emerald-500" /> Single / Multi Page Support</span>
+                  <span className="flex items-center gap-1.5"><CheckCircle2 className="w-4 h-4 text-emerald-500" /> Customizable Accent Colors</span>
+                  <span className="flex items-center gap-1.5"><CheckCircle2 className="w-4 h-4 text-emerald-500" /> Vector PDF Render</span>
                 </div>
                 <motion.button
                   whileHover={{ scale: 1.02 }}
@@ -590,7 +589,7 @@ export const LandingPage = () => {
 
         {/* CTA SECTION */}
         <section className="py-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
