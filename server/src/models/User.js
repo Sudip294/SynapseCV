@@ -51,6 +51,14 @@ const userSchema = new mongoose.Schema(
       twitter: { type: String, default: '' },
       website: { type: String, default: '' },
     },
+    resetOTP: {
+      type: String,
+      default: null,
+    },
+    resetOTPExpire: {
+      type: Date,
+      default: null,
+    },
   },
   {
     timestamps: true,
