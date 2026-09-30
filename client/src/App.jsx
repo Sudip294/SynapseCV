@@ -12,6 +12,7 @@ import { ResumeAnalyzerPage } from './pages/ResumeAnalyzerPage';
 import { ProtectedRoute } from './components/auth/ProtectedRoute';
 import { AuthModal } from './components/auth/AuthModal';
 import { Toaster } from 'react-hot-toast';
+import { ScrollToTop } from './components/ui/ScrollToTop';
 
 export const App = () => {
   return (
@@ -65,7 +66,7 @@ export const App = () => {
 
             {/* Toast Notification Container */}
             <Toaster
-              position="bottom-right"
+              position="top-center"
               toastOptions={{
                 duration: 4000,
                 style: {
@@ -89,6 +90,9 @@ export const App = () => {
                 },
               }}
             />
+
+            {/* Scroll to Top Button with Progress */}
+            <ScrollToTop />
           </div>
         </Router>
       </AuthProvider>

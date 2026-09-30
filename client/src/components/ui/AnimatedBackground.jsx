@@ -1,29 +1,31 @@
 import React, { useEffect, useRef, useCallback } from 'react';
 
-const NUM_PARTICLES = 80;
-const CONNECTION_DISTANCE = 150;
-const PARTICLE_SPEED = 0.35;
-const SCROLL_PARALLAX_FACTOR = 0.15;
-
-function createParticle(canvas) {
-  return {
-    x: Math.random() * canvas.width,
-    y: Math.random() * canvas.height,
-    vx: (Math.random() - 0.5) * PARTICLE_SPEED,
-    vy: (Math.random() - 0.5) * PARTICLE_SPEED,
-    radius: Math.random() * 1.8 + 0.8,
-    baseOpacity: Math.random() * 0.5 + 0.3,
-    pulseOffset: Math.random() * Math.PI * 2,
-  };
-}
-
 export const AnimatedBackground = ({ isDark = false }) => {
   const canvasRef = useRef(null);
-  const particlesRef = useRef([]);
   const animFrameRef = useRef(null);
-  const scrollYRef = useRef(0);
   const timeRef = useRef(0);
-  const mouseRef = useRef({ x: -9999, y: -9999 });
+  const scrollYRef = useRef(0);
+  const mouseRef = useRef({ x: -1000, y: -1000 });
+  const particlesRef = useRef([]);
+
+  const initParticles = useCallback(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const p = [];
+    const numParticles = 40;
+    for (let i = 0; i < numParticles; i++) {
+      p.push({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        s: Math.random() * 2 + 0.5, // size
+        vx: (Math.random() - 0.5) * 0.4,
+        vy: Math.random() * -0.8 - 0.2, // float upwards
+        baseAlpha: Math.random() * 0.6 + 0.2,
+        offset: Math.random() * 100
+      });
+    }
+    particlesRef.current = p;
+  }, []);
 
   const draw = useCallback(() => {
     const canvas = canvasRef.current;
@@ -32,109 +34,155 @@ export const AnimatedBackground = ({ isDark = false }) => {
     const W = canvas.width;
     const H = canvas.height;
 
+    // Time progression for smooth animation
+    const t = timeRef.current;
+    timeRef.current += 0.003;
+
+    // Parallax scroll offset
+    const scrollOffset = scrollYRef.current * 0.15;
+
     ctx.clearRect(0, 0, W, H);
 
-    const scrollOffset = scrollYRef.current * SCROLL_PARALLAX_FACTOR;
-    const t = timeRef.current;
-    timeRef.current += 0.005;
-
-    // --- Aurora gradient background ---
-    const aurora1 = ctx.createRadialGradient(W * 0.2, H * 0.1 - scrollOffset * 0.3, 0, W * 0.2, H * 0.1 - scrollOffset * 0.3, W * 0.6);
-    aurora1.addColorStop(0, isDark ? 'rgba(99,102,241,0.22)' : 'rgba(99,102,241,0.12)');
-    aurora1.addColorStop(1, 'rgba(0,0,0,0)');
-    ctx.fillStyle = aurora1;
+    // --- 1. Morphing Fluid Aurora Gradients ---
+    // Blob 1 (Indigo/Blue)
+    const x1 = W * 0.3 + Math.cos(t * 0.8) * W * 0.2;
+    const y1 = H * 0.4 + Math.sin(t * 0.5) * H * 0.3 - scrollOffset * 0.8;
+    const g1 = ctx.createRadialGradient(x1, y1, 0, x1, y1, W * 0.5);
+    g1.addColorStop(0, isDark ? 'rgba(99,102,241,0.18)' : 'rgba(99,102,241,0.08)');
+    g1.addColorStop(1, 'rgba(0,0,0,0)');
+    ctx.fillStyle = g1;
     ctx.fillRect(0, 0, W, H);
 
-    const aurora2 = ctx.createRadialGradient(W * 0.8, H * 0.5 + scrollOffset * 0.2, 0, W * 0.8, H * 0.5 + scrollOffset * 0.2, W * 0.55);
-    aurora2.addColorStop(0, isDark ? 'rgba(6,182,212,0.18)' : 'rgba(6,182,212,0.09)');
-    aurora2.addColorStop(1, 'rgba(0,0,0,0)');
-    ctx.fillStyle = aurora2;
+    // Blob 2 (Purple)
+    const x2 = W * 0.7 + Math.sin(t * 1.2) * W * 0.2;
+    const y2 = H * 0.7 + Math.cos(t * 0.9) * H * 0.2 - scrollOffset * 0.5;
+    const g2 = ctx.createRadialGradient(x2, y2, 0, x2, y2, W * 0.45);
+    g2.addColorStop(0, isDark ? 'rgba(168,85,247,0.15)' : 'rgba(168,85,247,0.07)');
+    g2.addColorStop(1, 'rgba(0,0,0,0)');
+    ctx.fillStyle = g2;
     ctx.fillRect(0, 0, W, H);
 
-    const aurora3 = ctx.createRadialGradient(W * 0.5, H * 0.8 - scrollOffset * 0.15, 0, W * 0.5, H * 0.8 - scrollOffset * 0.15, W * 0.5);
-    aurora3.addColorStop(0, isDark ? 'rgba(168,85,247,0.18)' : 'rgba(168,85,247,0.09)');
-    aurora3.addColorStop(1, 'rgba(0,0,0,0)');
-    ctx.fillStyle = aurora3;
+    // Blob 3 (Cyan)
+    const x3 = W * 0.5 + Math.cos(t * 0.7 + Math.PI) * W * 0.2;
+    const y3 = H * 0.2 + Math.sin(t * 1.1) * H * 0.3 - scrollOffset * 1.2;
+    const g3 = ctx.createRadialGradient(x3, y3, 0, x3, y3, W * 0.5);
+    g3.addColorStop(0, isDark ? 'rgba(6,182,212,0.12)' : 'rgba(6,182,212,0.06)');
+    g3.addColorStop(1, 'rgba(0,0,0,0)');
+    ctx.fillStyle = g3;
     ctx.fillRect(0, 0, W, H);
 
-    // --- Update + draw particles ---
-    const particles = particlesRef.current;
-    for (let i = 0; i < particles.length; i++) {
-      const p = particles[i];
+    // --- 2. Topographic Cyber Wave Mesh ---
+    const linesCount = Math.floor(H / 40) + 12; // Extra lines for overflow
+    const pointsPerLine = Math.floor(W / 50);
+    const spacingX = W / pointsPerLine;
 
-      // Move
-      p.x += p.vx;
-      p.y += p.vy;
+    ctx.lineWidth = 1.2;
+    ctx.lineCap = 'round';
+    ctx.lineJoin = 'round';
 
-      // Wrap around edges
-      if (p.x < -10) p.x = W + 10;
-      if (p.x > W + 10) p.x = -10;
-      if (p.y < -10) p.y = H + 10;
-      if (p.y > H + 10) p.y = -10;
+    for (let i = -5; i < linesCount; i++) {
+      // Calculate base Y for this wave line, applying parallax scroll loop
+      const baseY = (i * 40) - (scrollOffset % 40);
 
-      // Scroll parallax offset per particle
-      const drawY = p.y - scrollOffset * (0.05 + (i % 5) * 0.02);
+      ctx.beginPath();
+      let firstPoint = true;
 
-      // Pulse opacity
-      const pulse = Math.sin(t * 1.5 + p.pulseOffset) * 0.2 + p.baseOpacity;
+      for (let j = 0; j <= pointsPerLine; j++) {
+        const bx = j * spacingX;
 
-      // Mouse repel
-      const dx = p.x - mouseRef.current.x;
-      const dy = drawY - mouseRef.current.y;
-      const dist = Math.sqrt(dx * dx + dy * dy);
-      if (dist < 100) {
-        const force = (100 - dist) / 100;
-        p.x += (dx / dist) * force * 1.2;
-        p.y += (dy / dist) * force * 1.2;
-      }
+        // Generate fluid wave deformations using multiple sine waves
+        const wave1 = Math.sin(bx * 0.003 + t * 2 + i * 0.15) * 20;
+        const wave2 = Math.cos(bx * 0.005 - t * 1.5 + i * 0.08) * 15;
+        const wave3 = Math.sin(bx * 0.01 + t) * 5;
 
-      // Draw connections
-      for (let j = i + 1; j < particles.length; j++) {
-        const q = particles[j];
-        const drawQY = q.y - scrollOffset * (0.05 + (j % 5) * 0.02);
-        const cdx = p.x - q.x;
-        const cdy = drawY - drawQY;
-        const cdist = Math.sqrt(cdx * cdx + cdy * cdy);
-        if (cdist < CONNECTION_DISTANCE) {
-          const lineOpacity = (1 - cdist / CONNECTION_DISTANCE) * 0.45;
-          ctx.beginPath();
-          ctx.strokeStyle = isDark
-            ? `rgba(139,92,246,${lineOpacity})`
-            : `rgba(99,102,241,${lineOpacity})`;
-          ctx.lineWidth = 0.8;
-          ctx.moveTo(p.x, drawY);
-          ctx.lineTo(q.x, drawQY);
-          ctx.stroke();
+        let by = baseY + wave1 + wave2 + wave3;
+
+        // Interactive Mouse Ripples & Magnetism
+        const dx = bx - mouseRef.current.x;
+        // Adjust Y distance calculation to account for base Y vs actual mouse Y
+        const dy = by - mouseRef.current.y;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+
+        if (dist < 350) { // Increased interaction radius from 250 to 350
+          const force = (350 - dist) / 350;
+          // Stronger magnetic ripple bump
+          const ripple = Math.cos(dist * 0.03 - t * 8) * 35 * force;
+          by += ripple - (dy * force * 0.35); // Stronger magnetic pull
+        }
+
+        if (firstPoint) {
+          ctx.moveTo(bx, by);
+          firstPoint = false;
+        } else {
+          // Add slight bezier curves for smoother lines (using quadratic curve approx)
+          // For simplicity and performance, straight line segments with enough points look smooth
+          ctx.lineTo(bx, by);
         }
       }
 
-      // Draw particle dot
-      ctx.beginPath();
-      ctx.arc(p.x, drawY, p.radius, 0, Math.PI * 2);
-      ctx.fillStyle = isDark
-        ? `rgba(165,180,252,${pulse})`
-        : `rgba(99,102,241,${pulse})`;
-      ctx.fill();
+      // Dynamic depth opacity (lines lower on screen are more visible)
+      const depthRatio = Math.max(0, Math.min(1, baseY / H));
+      // Increased opacity for both modes for better visibility
+      const lineAlpha = isDark ? 0.08 + (depthRatio * 0.25) : 0.06 + (depthRatio * 0.2);
 
-      // Glow ring on larger ones
-      if (p.radius > 2) {
+      // Cyber gradient for each line
+      const strokeG = ctx.createLinearGradient(0, 0, W, 0);
+      strokeG.addColorStop(0, isDark ? `rgba(99,102,241,0)` : `rgba(99,102,241,0)`);
+      strokeG.addColorStop(0.3, isDark ? `rgba(99,102,241,${lineAlpha})` : `rgba(99,102,241,${lineAlpha})`);
+      strokeG.addColorStop(0.7, isDark ? `rgba(168,85,247,${lineAlpha})` : `rgba(168,85,247,${lineAlpha})`);
+      strokeG.addColorStop(1, isDark ? `rgba(6,182,212,0)` : `rgba(6,182,212,0)`);
+
+      ctx.strokeStyle = strokeG;
+      ctx.stroke();
+    }
+
+    // --- 3. Floating Data Node Particles ---
+    const pList = particlesRef.current;
+    for (let i = 0; i < pList.length; i++) {
+      const p = pList[i];
+      p.x += p.vx;
+      p.y += p.vy;
+
+      // Wrap around screen
+      if (p.y < -20) p.y = H + 20;
+      if (p.x < -20) p.x = W + 20;
+      if (p.x > W + 20) p.x = -20;
+
+      // Mouse repel for particles
+      const dx = p.x - mouseRef.current.x;
+      const dy = p.y - mouseRef.current.y;
+      const dist = Math.sqrt(dx * dx + dy * dy);
+      if (dist < 150) {
+        const force = (150 - dist) / 150;
+        p.x += (dx / dist) * force * 2;
+        p.y += (dy / dist) * force * 2;
+      }
+
+      // Oscillate opacity
+      const pulse = Math.sin(t * 3 + p.offset) * 0.3 + p.baseAlpha;
+      const finalAlpha = Math.max(0.1, Math.min(1, pulse));
+
+      // Draw particle (anti-gravity data fragment)
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.s, 0, Math.PI * 2);
+      ctx.fillStyle = isDark
+        ? `rgba(165,180,252,${finalAlpha})`
+        : `rgba(99,102,241,${finalAlpha})`;
+      ctx.fill();
+      
+      // Glow on larger particles
+      if(p.s > 1.5) {
         ctx.beginPath();
-        ctx.arc(p.x, drawY, p.radius * 2.5, 0, Math.PI * 2);
+        ctx.arc(p.x, p.y, p.s * 3, 0, Math.PI * 2);
         ctx.fillStyle = isDark
-          ? `rgba(139,92,246,${pulse * 0.2})`
-          : `rgba(99,102,241,${pulse * 0.15})`;
+          ? `rgba(168,85,247,${finalAlpha * 0.2})`
+          : `rgba(99,102,241,${finalAlpha * 0.15})`;
         ctx.fill();
       }
     }
 
     animFrameRef.current = requestAnimationFrame(draw);
   }, [isDark]);
-
-  const initParticles = useCallback(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    particlesRef.current = Array.from({ length: NUM_PARTICLES }, () => createParticle(canvas));
-  }, []);
 
   const resize = useCallback(() => {
     const canvas = canvasRef.current;
@@ -156,7 +204,7 @@ export const AnimatedBackground = ({ isDark = false }) => {
     };
 
     const handleLeave = () => {
-      mouseRef.current = { x: -9999, y: -9999 };
+      mouseRef.current = { x: -1000, y: -1000 };
     };
 
     window.addEventListener('resize', resize, { passive: true });
@@ -183,3 +231,4 @@ export const AnimatedBackground = ({ isDark = false }) => {
     />
   );
 };
+
