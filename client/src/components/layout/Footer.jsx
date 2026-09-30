@@ -6,7 +6,7 @@ import toast from 'react-hot-toast';
 // LinkedIn SVG icon (not available in this version of lucide-react)
 const LinkedInIcon = () => (
   <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-    <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
+    <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z" />
   </svg>
 );
 
@@ -48,7 +48,7 @@ export const Footer = () => {
 
               {/* Gmail */}
               <a
-                href="mailto:sudipbag294@gmail.com"
+                href="https://gmail.google.com/mail/"
                 className="p-2 rounded-lg bg-slate-800/80 hover:bg-red-600 hover:text-white transition-all"
                 aria-label="Email"
                 title="Email us"
@@ -118,7 +118,7 @@ export const Footer = () => {
 
         {/* Bottom bar */}
         <div className="mt-12 pt-8 border-t border-slate-800/80 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-500 gap-4">
-          <p>© {new Date().getFullYear()} SynapseCV Inc. All rights reserved. | Designed by Sudip Bag</p>
+          <p>© {new Date().getFullYear()} SynapseCV Inc. All rights reserved. | Designed by Sudip Bag.</p>
           <div className="flex gap-6">
             <a href="#" className="hover:text-slate-400 transition-colors">Privacy Policy</a>
             <a href="#" className="hover:text-slate-400 transition-colors">Terms of Service</a>
