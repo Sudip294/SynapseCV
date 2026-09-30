@@ -419,7 +419,8 @@ export const LandingPage = () => {
         </section>
 
         {/* HOW IT WORKS SECTION */}
-        <section className="py-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <section className="py-24 bg-slate-50 dark:bg-slate-950 relative border-t border-slate-200 dark:border-slate-800">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
             initial="hidden"
             whileInView="visible"
@@ -484,10 +485,11 @@ export const LandingPage = () => {
               </p>
             </motion.div>
           </motion.div>
+          </div>
         </section>
 
         {/* TEMPLATE GALLERY TEASER SECTION */}
-        <section id="templates" className="py-24 bg-slate-100 dark:bg-slate-900/60 border-t border-slate-200 dark:border-slate-800 transition-colors relative">
+        <section id="templates" className="py-24 bg-slate-100 dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 transition-colors relative">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
               <div>
@@ -597,7 +599,8 @@ export const LandingPage = () => {
         </section>
 
         {/* CTA SECTION */}
-        <section className="py-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <section className="py-24 bg-slate-50 dark:bg-slate-950 relative border-t border-slate-200 dark:border-slate-800">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
             whileInView={{ opacity: 1, scale: 1 }}
@@ -636,6 +639,7 @@ export const LandingPage = () => {
               </div>
             </div>
           </motion.div>
+          </div>
         </section>
       </div>
     </div>
