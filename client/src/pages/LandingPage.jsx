@@ -16,9 +16,36 @@ import {
   Layers, 
   Star, 
   Download,
-  AlertCircle
+  AlertCircle,
+  TrendingUp,
+  Cpu,
+  Check
 } from 'lucide-react';
 import { TemplateEngine } from '../components/templates/TemplateEngine';
+
+// Animation Variants for Scroll Animations & Micro-Interactions
+const fadeInUp = {
+  hidden: { opacity: 0, y: 30 },
+  visible: (i = 0) => ({
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.6,
+      delay: i * 0.1,
+      ease: [0.215, 0.61, 0.355, 1],
+    },
+  }),
+};
+
+const staggerContainer = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.12,
+    },
+  },
+};
 
 export const LandingPage = () => {
   const [activeTab, setActiveTab] = useState('executive');
@@ -43,23 +70,25 @@ export const LandingPage = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 overflow-hidden">
-      {/* Background Decorative Blur Orbs */}
+    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 overflow-hidden selection:bg-brand-500 selection:text-white">
+      {/* Background Glowing Ambient Orbs */}
       <div className="relative">
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-96 bg-gradient-to-b from-brand-500/10 via-brand-500/5 to-transparent blur-3xl pointer-events-none -z-10" />
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-[500px] bg-gradient-to-b from-brand-500/15 via-indigo-500/10 to-transparent blur-3xl pointer-events-none -z-10 animate-pulse" />
+        <div className="absolute top-40 right-10 w-72 h-72 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none -z-10" />
+        <div className="absolute top-60 left-10 w-72 h-72 bg-purple-500/10 rounded-full blur-3xl pointer-events-none -z-10" />
 
         {/* HERO SECTION */}
         <section className="pt-16 pb-20 md:pt-24 md:pb-28 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
           <div className="text-center max-w-4xl mx-auto space-y-6">
             
-            {/* Badge */}
+            {/* Animated Badge */}
             <motion.div
-              initial={{ opacity: 0, y: -10 }}
-              animate={{ opacity: 1, y: 0 }}
+              initial={{ opacity: 0, scale: 0.9, y: -10 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
               transition={{ duration: 0.5 }}
-              className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-brand-50 dark:bg-brand-950/80 border border-brand-200 dark:border-brand-800 text-brand-700 dark:text-brand-300 text-xs font-semibold tracking-wide"
+              className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-brand-50/90 dark:bg-brand-950/80 border border-brand-200/80 dark:border-brand-800/80 text-brand-700 dark:text-brand-300 text-xs font-semibold tracking-wide shadow-sm hover:scale-105 transition-transform cursor-pointer"
             >
-              <Sparkles className="w-4 h-4 text-brand-600 dark:text-brand-400 animate-pulse" />
+              <Sparkles className="w-4 h-4 text-brand-600 dark:text-brand-400 animate-spin" style={{ animationDuration: '4s' }} />
               <span>Next-Generation Resume Engine Powered by Gemini AI</span>
             </motion.div>
 
@@ -68,9 +97,9 @@ export const LandingPage = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.1 }}
-              className="text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight text-slate-900 dark:text-white leading-[1.15]"
+              className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black tracking-tight text-slate-900 dark:text-white leading-[1.15]"
             >
-              Build Resumes That Beat the ATS & Land <span className="bg-gradient-to-r from-brand-600 via-brand-500 to-cyan-500 bg-clip-text text-transparent">Dream Interviews</span>
+              Build Resumes That Beat the ATS & Land <span className="bg-gradient-to-r from-brand-600 via-indigo-500 to-cyan-500 bg-clip-text text-transparent animate-gradient">Dream Interviews</span>
             </motion.h1>
 
             {/* Subtitle */}
@@ -90,21 +119,25 @@ export const LandingPage = () => {
               transition={{ duration: 0.6, delay: 0.3 }}
               className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4"
             >
-              <button
+              <motion.button
+                whileHover={{ scale: 1.03 }}
+                whileTap={{ scale: 0.98 }}
                 onClick={() => handleAction('Resume Builder')}
-                className="w-full sm:w-auto px-8 py-3.5 rounded-xl bg-brand-600 hover:bg-brand-700 text-white font-semibold shadow-lg shadow-brand-600/25 hover:shadow-brand-600/40 transition-all flex items-center justify-center gap-2 group"
+                className="w-full sm:w-auto px-8 py-4 rounded-xl bg-brand-600 hover:bg-brand-700 text-white font-bold shadow-xl shadow-brand-600/30 hover:shadow-brand-600/50 transition-all flex items-center justify-center gap-2.5 group cursor-pointer"
               >
                 <span>Create My Resume Free</span>
-                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-              </button>
+                <ArrowRight className="w-4 h-4 group-hover:translate-x-1.5 transition-transform" />
+              </motion.button>
 
-              <button
+              <motion.button
+                whileHover={{ scale: 1.03 }}
+                whileTap={{ scale: 0.98 }}
                 onClick={() => handleAction('ATS Resume Analyzer', '/analyzer')}
-                className="w-full sm:w-auto px-8 py-3.5 rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-800 font-semibold text-slate-800 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-850 transition-colors flex items-center justify-center gap-2 shadow-sm"
+                className="w-full sm:w-auto px-8 py-4 rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-800 font-bold text-slate-800 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-850 transition-colors flex items-center justify-center gap-2 shadow-sm cursor-pointer"
               >
                 <Target className="w-4 h-4 text-brand-600 dark:text-brand-400" />
                 <span>Analyze Existing Resume</span>
-              </button>
+              </motion.button>
             </motion.div>
 
             {/* Key Value Highlights */}
@@ -112,7 +145,7 @@ export const LandingPage = () => {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 0.6, delay: 0.4 }}
-              className="pt-6 flex flex-wrap items-center justify-center gap-6 text-xs sm:text-sm text-slate-500 dark:text-slate-400"
+              className="pt-6 flex flex-wrap items-center justify-center gap-6 text-xs sm:text-sm text-slate-500 dark:text-slate-400 font-medium"
             >
               <div className="flex items-center gap-2">
                 <CheckCircle2 className="w-4 h-4 text-emerald-500" />
@@ -129,272 +162,320 @@ export const LandingPage = () => {
             </motion.div>
           </div>
 
-          {/* Interactive Preview Dashboard Mockup */}
+          {/* Interactive Hero Illustration & Dashboard Preview Graphic */}
           <motion.div
-            initial={{ opacity: 0, y: 40 }}
-            animate={{ opacity: 1, y: 0 }}
+            initial={{ opacity: 0, y: 50, scale: 0.98 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
             transition={{ duration: 0.8, delay: 0.4 }}
-            className="mt-14 max-w-5xl mx-auto rounded-2xl border border-slate-200/80 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-2xl p-4 sm:p-6 md:p-8"
+            className="mt-14 max-w-5xl mx-auto rounded-2xl border border-slate-200/80 dark:border-slate-800/80 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md shadow-2xl p-4 sm:p-6 md:p-8 relative overflow-hidden group"
           >
-            {/* Window bar */}
+            {/* Glowing Accent Border Gradient */}
+            <div className="absolute -inset-0.5 bg-gradient-to-r from-brand-500/20 via-cyan-500/20 to-indigo-500/20 rounded-2xl blur opacity-75 group-hover:opacity-100 transition duration-1000 group-hover:duration-200 pointer-events-none -z-10" />
+
+            {/* Window Bar Header */}
             <div className="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 pb-4 mb-6">
               <div className="flex items-center gap-2">
-                <div className="w-3 h-3 rounded-full bg-rose-500" />
-                <div className="w-3 h-3 rounded-full bg-amber-500" />
-                <div className="w-3 h-3 rounded-full bg-emerald-500" />
-                <span className="text-xs text-slate-400 font-mono ml-2">synapsecv.io/builder/preview</span>
+                <div className="w-3 h-3 rounded-full bg-rose-500/80" />
+                <div className="w-3 h-3 rounded-full bg-amber-500/80" />
+                <div className="w-3 h-3 rounded-full bg-emerald-500/80" />
+                <span className="text-xs text-slate-400 font-mono ml-2 hidden sm:inline-block">synapsecv.io/builder/live-session</span>
               </div>
-              <div className="flex items-center gap-2 text-xs font-medium text-slate-500 dark:text-slate-400">
-                <span className="inline-block w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-                <span>Live AI Parsing Engine</span>
+              <div className="flex items-center gap-3 text-xs font-semibold text-slate-500 dark:text-slate-400">
+                <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
+                  <span className="w-2 h-2 rounded-full bg-emerald-500 animate-ping" />
+                  Live AI Engine Active
+                </span>
               </div>
             </div>
 
-            {/* Dashboard Mockup Grid */}
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-              {/* Left Column: Form & Editor Mockup */}
+            {/* Graphic Showcase: Vector Hero Graphic + Dashboard Grid */}
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
+              
+              {/* Left Side: Modern Vector Graphic Illustration */}
+              <div className="lg:col-span-5 relative flex justify-center items-center p-2 bg-gradient-to-b from-slate-100 to-slate-200/60 dark:from-slate-800/80 dark:to-slate-850/80 rounded-xl border border-slate-200/80 dark:border-slate-750 overflow-hidden shadow-inner group/img">
+                <img 
+                  src="/resume_hero_illustration.png" 
+                  alt="SynapseCV AI Resume Builder & ATS Vector Graphic" 
+                  className="w-full h-auto max-h-[300px] object-contain rounded-lg transition-transform duration-500 group-hover/img:scale-105"
+                />
+                
+                {/* Floating Micro Badge Overlay */}
+                <motion.div 
+                  animate={{ y: [0, -6, 0] }}
+                  transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
+                  className="absolute top-4 right-4 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md px-3 py-1.5 rounded-xl border border-brand-200 dark:border-brand-800/80 shadow-lg flex items-center gap-2 text-xs font-bold text-brand-600 dark:text-brand-400"
+                >
+                  <TrendingUp className="w-4 h-4 text-emerald-500" />
+                  <span>98% ATS Match</span>
+                </motion.div>
+              </div>
+
+              {/* Right Side: Interactive Mockup Grid */}
               <div className="lg:col-span-7 space-y-4">
-                <div className="flex items-center justify-between bg-slate-100 dark:bg-slate-850 p-3 rounded-xl">
+                
+                {/* Profile Header */}
+                <div className="flex items-center justify-between bg-slate-100/80 dark:bg-slate-850/90 p-3.5 rounded-xl border border-slate-200/60 dark:border-slate-800">
                   <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-full bg-brand-600 text-white font-bold flex items-center justify-center text-sm">
+                    <div className="w-10 h-10 rounded-full bg-gradient-to-br from-brand-500 to-indigo-600 text-white font-bold flex items-center justify-center text-sm shadow-md">
                       JD
                     </div>
                     <div>
-                      <h4 className="text-sm font-semibold text-slate-900 dark:text-white">Jane Doe</h4>
-                      <p className="text-xs text-slate-500">Senior Staff Software Engineer</p>
+                      <h4 className="text-sm font-bold text-slate-900 dark:text-white">Jane Doe</h4>
+                      <p className="text-xs text-slate-500 dark:text-slate-400">Senior Staff Software Engineer</p>
                     </div>
                   </div>
-                  <span className="px-2.5 py-1 rounded-full text-xs font-medium bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300">
-                    ATS Score: 94/100
+                  <span className="px-3 py-1 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800 shadow-sm flex items-center gap-1">
+                    <Check className="w-3.5 h-3.5" /> ATS Score: 94/100
                   </span>
                 </div>
 
-                {/* Simulated AI Suggestion Box */}
-                <div className="p-4 rounded-xl border border-brand-200 dark:border-brand-900/60 bg-brand-50/50 dark:bg-brand-950/30 space-y-2">
+                {/* Simulated AI Suggestion Card with Micro-Animation */}
+                <motion.div 
+                  whileHover={{ x: 4 }}
+                  className="p-4 rounded-xl border border-brand-200 dark:border-brand-800/70 bg-brand-50/60 dark:bg-brand-950/40 space-y-2 shadow-sm transition-all"
+                >
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2 text-brand-700 dark:text-brand-300 text-xs font-bold uppercase tracking-wider">
-                      <Sparkles className="w-4 h-4" />
+                      <Cpu className="w-4 h-4 animate-spin" style={{ animationDuration: '6s' }} />
                       <span>Gemini AI Actionable Improvement</span>
                     </div>
-                    <span className="text-[11px] text-brand-600 dark:text-brand-400 font-semibold">+12 ATS Points</span>
+                    <span className="text-[11px] text-brand-600 dark:text-brand-400 font-bold bg-brand-100 dark:bg-brand-900 px-2 py-0.5 rounded-md">+12 ATS Points</span>
                   </div>
-                  <p className="text-xs text-slate-700 dark:text-slate-300 leading-relaxed">
+                  <p className="text-xs text-slate-700 dark:text-slate-300 leading-relaxed font-medium">
                     "Architected microservices infrastructure reducing p99 latency by 42%" — Quantified business impact detected. Action verbs optimized.
                   </p>
-                </div>
+                </motion.div>
 
-                {/* Sections list */}
-                <div className="grid grid-cols-2 gap-3 text-xs">
-                  <div className="p-3 rounded-xl bg-slate-100 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-800 flex items-center justify-between">
-                    <span className="font-semibold text-slate-700 dark:text-slate-300">Work Experience</span>
-                    <span className="text-slate-400 font-mono">4 items</span>
+                {/* Section Stats Badges */}
+                <div className="grid grid-cols-2 gap-3 text-xs font-semibold">
+                  <div className="p-3 rounded-xl bg-slate-100/70 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-800 flex items-center justify-between">
+                    <span className="text-slate-700 dark:text-slate-300">Work Experience</span>
+                    <span className="text-brand-600 dark:text-brand-400 font-mono">4 items</span>
                   </div>
-                  <div className="p-3 rounded-xl bg-slate-100 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-800 flex items-center justify-between">
-                    <span className="font-semibold text-slate-700 dark:text-slate-300">Technical Skills</span>
-                    <span className="text-slate-400 font-mono">18 tags</span>
-                  </div>
-                  <div className="p-3 rounded-xl bg-slate-100 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-800 flex items-center justify-between">
-                    <span className="font-semibold text-slate-700 dark:text-slate-300">Education & Certs</span>
-                    <span className="text-slate-400 font-mono">3 verified</span>
-                  </div>
-                  <div className="p-3 rounded-xl bg-slate-100 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-800 flex items-center justify-between">
-                    <span className="font-semibold text-slate-700 dark:text-slate-300">Projects & Impact</span>
-                    <span className="text-slate-400 font-mono">2 links</span>
-                  </div>
-                </div>
-              </div>
-
-              {/* Right Column: Live Resume Preview Sheet Mockup */}
-              <div className="lg:col-span-5 bg-slate-100 dark:bg-slate-800 rounded-xl p-4 border border-slate-200 dark:border-slate-700 flex flex-col justify-between">
-                <div className="bg-white dark:bg-slate-900 rounded-lg p-4 shadow-sm border border-slate-200/80 dark:border-slate-800 space-y-3 font-sans">
-                  <div className="border-b border-slate-200 dark:border-slate-800 pb-2">
-                    <h3 className="font-bold text-sm text-slate-900 dark:text-white">JANE DOE</h3>
-                    <p className="text-[11px] text-brand-600 dark:text-brand-400 font-medium">Senior Staff Software Engineer • San Francisco, CA</p>
-                  </div>
-                  <div className="space-y-1">
-                    <p className="text-[10px] font-bold text-slate-400 uppercase">Executive Summary</p>
-                    <div className="h-2 bg-slate-200 dark:bg-slate-700 rounded w-full"></div>
-                    <div className="h-2 bg-slate-200 dark:bg-slate-700 rounded w-5/6"></div>
-                  </div>
-                  <div className="space-y-1.5 pt-1">
-                    <p className="text-[10px] font-bold text-slate-400 uppercase">Core Stack & Skills</p>
-                    <div className="flex flex-wrap gap-1">
-                      <span className="px-1.5 py-0.5 rounded text-[9px] bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300">Distributed Systems</span>
-                      <span className="px-1.5 py-0.5 rounded text-[9px] bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300">React.js</span>
-                      <span className="px-1.5 py-0.5 rounded text-[9px] bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300">Node.js</span>
-                      <span className="px-1.5 py-0.5 rounded text-[9px] bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300">AWS / K8s</span>
-                    </div>
+                  <div className="p-3 rounded-xl bg-slate-100/70 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-800 flex items-center justify-between">
+                    <span className="text-slate-700 dark:text-slate-300">Technical Skills</span>
+                    <span className="text-brand-600 dark:text-brand-400 font-mono">18 tags</span>
                   </div>
                 </div>
 
-                <div className="mt-4 flex items-center justify-between text-xs text-slate-500">
-                  <span className="flex items-center gap-1">
-                    <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500" /> Executive Template #1
-                  </span>
-                  <button 
-                    onClick={() => handleAction('PDF Export')} 
-                    className="text-xs font-semibold text-brand-600 dark:text-brand-400 hover:underline flex items-center gap-1"
-                  >
-                    <Download className="w-3.5 h-3.5" /> Preview PDF
-                  </button>
-                </div>
               </div>
             </div>
           </motion.div>
         </section>
 
         {/* FEATURES GRID SECTION */}
-        <section id="features" className="py-20 bg-white dark:bg-slate-900 border-y border-slate-200 dark:border-slate-800 transition-colors">
+        <section id="features" className="py-24 bg-white dark:bg-slate-900 border-y border-slate-200 dark:border-slate-800 transition-colors relative">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             
-            <div className="text-center max-w-3xl mx-auto mb-16 space-y-3">
-              <span className="text-xs font-bold tracking-widest text-brand-600 dark:text-brand-400 uppercase">
+            <motion.div 
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, margin: '-100px' }}
+              variants={fadeInUp}
+              className="text-center max-w-3xl mx-auto mb-16 space-y-3"
+            >
+              <span className="text-xs font-bold tracking-widest text-brand-600 dark:text-brand-400 uppercase bg-brand-50 dark:bg-brand-950/80 px-3 py-1 rounded-full border border-brand-200 dark:border-brand-800">
                 Enterprise-Grade Architecture
               </span>
-              <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 dark:text-white">
+              <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-slate-900 dark:text-white">
                 Everything You Need to Get Hired Faster
               </h2>
-              <p className="text-slate-600 dark:text-slate-400 text-base leading-relaxed">
+              <p className="text-slate-600 dark:text-slate-400 text-base sm:text-lg leading-relaxed">
                 SynapseCV provides an end-to-end suite designed specifically to bypass initial automated ATS rejections and highlight your real achievements.
               </p>
-            </div>
+            </motion.div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {/* Feature Cards Staggered Grid */}
+            <motion.div 
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, margin: '-50px' }}
+              variants={staggerContainer}
+              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
+            >
               
               {/* Feature 1 */}
-              <div className="p-6 rounded-2xl bg-slate-50 dark:bg-slate-850 border border-slate-200 dark:border-slate-800 space-y-4 hover:border-brand-500/40 transition-colors">
-                <div className="w-12 h-12 rounded-xl bg-brand-100 dark:bg-brand-950 text-brand-600 dark:text-brand-400 flex items-center justify-center font-bold">
+              <motion.div 
+                variants={fadeInUp}
+                whileHover={{ y: -6, transition: { duration: 0.2 } }}
+                className="p-7 rounded-2xl bg-slate-50 dark:bg-slate-850 border border-slate-200 dark:border-slate-800 space-y-4 hover:border-brand-500/50 hover:shadow-xl dark:hover:shadow-brand-950/30 transition-all group cursor-pointer"
+              >
+                <div className="w-12 h-12 rounded-xl bg-brand-100 dark:bg-brand-950 text-brand-600 dark:text-brand-400 flex items-center justify-center font-bold group-hover:scale-110 transition-transform">
                   <Sparkles className="w-6 h-6" />
                 </div>
-                <h3 className="text-lg font-bold text-slate-900 dark:text-white">AI Content Refinement</h3>
+                <h3 className="text-lg font-bold text-slate-900 dark:text-white group-hover:text-brand-600 dark:group-hover:text-brand-400 transition-colors">AI Content Refinement</h3>
                 <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
                   Transform raw bullet points into quantifiable, high-impact statements using Google Gemini AI, strictly grounded in your actual experience.
                 </p>
-              </div>
+              </motion.div>
 
               {/* Feature 2 */}
-              <div className="p-6 rounded-2xl bg-slate-50 dark:bg-slate-850 border border-slate-200 dark:border-slate-800 space-y-4 hover:border-brand-500/40 transition-colors">
-                <div className="w-12 h-12 rounded-xl bg-cyan-100 dark:bg-cyan-950 text-cyan-600 dark:text-cyan-400 flex items-center justify-center font-bold">
+              <motion.div 
+                variants={fadeInUp}
+                whileHover={{ y: -6, transition: { duration: 0.2 } }}
+                className="p-7 rounded-2xl bg-slate-50 dark:bg-slate-850 border border-slate-200 dark:border-slate-800 space-y-4 hover:border-cyan-500/50 hover:shadow-xl dark:hover:shadow-cyan-950/30 transition-all group cursor-pointer"
+              >
+                <div className="w-12 h-12 rounded-xl bg-cyan-100 dark:bg-cyan-950 text-cyan-600 dark:text-cyan-400 flex items-center justify-center font-bold group-hover:scale-110 transition-transform">
                   <BarChart3 className="w-6 h-6" />
                 </div>
-                <h3 className="text-lg font-bold text-slate-900 dark:text-white">Real-Time ATS Score</h3>
+                <h3 className="text-lg font-bold text-slate-900 dark:text-white group-hover:text-cyan-600 dark:group-hover:text-cyan-400 transition-colors">Real-Time ATS Score</h3>
                 <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
                   Instant breakdown of your resume's keyword match, section depth, formatting hygiene, and formatting score against modern applicant tracking systems.
                 </p>
-              </div>
+              </motion.div>
 
               {/* Feature 3 */}
-              <div className="p-6 rounded-2xl bg-slate-50 dark:bg-slate-850 border border-slate-200 dark:border-slate-800 space-y-4 hover:border-brand-500/40 transition-colors">
-                <div className="w-12 h-12 rounded-xl bg-indigo-100 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-400 flex items-center justify-center font-bold">
+              <motion.div 
+                variants={fadeInUp}
+                whileHover={{ y: -6, transition: { duration: 0.2 } }}
+                className="p-7 rounded-2xl bg-slate-50 dark:bg-slate-850 border border-slate-200 dark:border-slate-800 space-y-4 hover:border-indigo-500/50 hover:shadow-xl dark:hover:shadow-indigo-950/30 transition-all group cursor-pointer"
+              >
+                <div className="w-12 h-12 rounded-xl bg-indigo-100 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-400 flex items-center justify-center font-bold group-hover:scale-110 transition-transform">
                   <Layout className="w-6 h-6" />
                 </div>
-                <h3 className="text-lg font-bold text-slate-900 dark:text-white">5-10+ Professional Templates</h3>
+                <h3 className="text-lg font-bold text-slate-900 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">5-10+ Professional Templates</h3>
                 <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
                   Choose from clean, battle-tested layout architectures designed to parse flawlessly in Workday, Greenhouse, Lever, and Taleo.
                 </p>
-              </div>
+              </motion.div>
 
               {/* Feature 4 */}
-              <div className="p-6 rounded-2xl bg-slate-50 dark:bg-slate-850 border border-slate-200 dark:border-slate-800 space-y-4 hover:border-brand-500/40 transition-colors">
-                <div className="w-12 h-12 rounded-xl bg-emerald-100 dark:bg-emerald-950 text-emerald-600 dark:text-emerald-400 flex items-center justify-center font-bold">
+              <motion.div 
+                variants={fadeInUp}
+                whileHover={{ y: -6, transition: { duration: 0.2 } }}
+                className="p-7 rounded-2xl bg-slate-50 dark:bg-slate-850 border border-slate-200 dark:border-slate-800 space-y-4 hover:border-emerald-500/50 hover:shadow-xl dark:hover:shadow-emerald-950/30 transition-all group cursor-pointer"
+              >
+                <div className="w-12 h-12 rounded-xl bg-emerald-100 dark:bg-emerald-950 text-emerald-600 dark:text-emerald-400 flex items-center justify-center font-bold group-hover:scale-110 transition-transform">
                   <Target className="w-6 h-6" />
                 </div>
-                <h3 className="text-lg font-bold text-slate-900 dark:text-white">Job Description Matcher</h3>
+                <h3 className="text-lg font-bold text-slate-900 dark:text-white group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">Job Description Matcher</h3>
                 <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
                   Paste target job specs to instantly highlight missing technical skills, domain terms, and required qualification gaps before submitting.
                 </p>
-              </div>
+              </motion.div>
 
               {/* Feature 5 */}
-              <div className="p-6 rounded-2xl bg-slate-50 dark:bg-slate-850 border border-slate-200 dark:border-slate-800 space-y-4 hover:border-brand-500/40 transition-colors">
-                <div className="w-12 h-12 rounded-xl bg-amber-100 dark:bg-amber-950 text-amber-600 dark:text-amber-400 flex items-center justify-center font-bold">
+              <motion.div 
+                variants={fadeInUp}
+                whileHover={{ y: -6, transition: { duration: 0.2 } }}
+                className="p-7 rounded-2xl bg-slate-50 dark:bg-slate-850 border border-slate-200 dark:border-slate-800 space-y-4 hover:border-amber-500/50 hover:shadow-xl dark:hover:shadow-amber-950/30 transition-all group cursor-pointer"
+              >
+                <div className="w-12 h-12 rounded-xl bg-amber-100 dark:bg-amber-950 text-amber-600 dark:text-amber-400 flex items-center justify-center font-bold group-hover:scale-110 transition-transform">
                   <Layers className="w-6 h-6" />
                 </div>
-                <h3 className="text-lg font-bold text-slate-900 dark:text-white">Structured Data Model</h3>
+                <h3 className="text-lg font-bold text-slate-900 dark:text-white group-hover:text-amber-600 dark:group-hover:text-amber-400 transition-colors">Structured Data Model</h3>
                 <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
                   Your experience, projects, skills, and certifications are stored cleanly as separate entities, guaranteeing seamless template swapping.
                 </p>
-              </div>
+              </motion.div>
 
               {/* Feature 6 */}
-              <div className="p-6 rounded-2xl bg-slate-50 dark:bg-slate-850 border border-slate-200 dark:border-slate-800 space-y-4 hover:border-brand-500/40 transition-colors">
-                <div className="w-12 h-12 rounded-xl bg-purple-100 dark:bg-purple-950 text-purple-600 dark:text-purple-400 flex items-center justify-center font-bold">
+              <motion.div 
+                variants={fadeInUp}
+                whileHover={{ y: -6, transition: { duration: 0.2 } }}
+                className="p-7 rounded-2xl bg-slate-50 dark:bg-slate-850 border border-slate-200 dark:border-slate-800 space-y-4 hover:border-purple-500/50 hover:shadow-xl dark:hover:shadow-purple-950/30 transition-all group cursor-pointer"
+              >
+                <div className="w-12 h-12 rounded-xl bg-purple-100 dark:bg-purple-950 text-purple-600 dark:text-purple-400 flex items-center justify-center font-bold group-hover:scale-110 transition-transform">
                   <Shield className="w-6 h-6" />
                 </div>
-                <h3 className="text-lg font-bold text-slate-900 dark:text-white">Full Privacy Control</h3>
+                <h3 className="text-lg font-bold text-slate-900 dark:text-white group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors">Full Privacy Control</h3>
                 <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
                   Your data remains strictly yours. Manage profile details, export anytime, or delete your account and all stored records permanently with one click.
                 </p>
-              </div>
+              </motion.div>
 
-            </div>
+            </motion.div>
           </div>
         </section>
 
         {/* HOW IT WORKS SECTION */}
-        <section className="py-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center max-w-3xl mx-auto mb-16 space-y-3">
-            <span className="text-xs font-bold tracking-widest text-brand-600 dark:text-brand-400 uppercase">
+        <section className="py-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <motion.div 
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: '-100px' }}
+            variants={fadeInUp}
+            className="text-center max-w-3xl mx-auto mb-16 space-y-3"
+          >
+            <span className="text-xs font-bold tracking-widest text-brand-600 dark:text-brand-400 uppercase bg-brand-50 dark:bg-brand-950/80 px-3 py-1 rounded-full border border-brand-200 dark:border-brand-800">
               Simple 3-Step Workflow
             </span>
-            <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 dark:text-white">
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-slate-900 dark:text-white">
               From Raw Draft to High-Score ATS Resume
             </h2>
-          </div>
+          </motion.div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 relative">
-            <div className="p-8 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-center space-y-4 shadow-sm relative">
-              <div className="w-12 h-12 mx-auto rounded-full bg-brand-600 text-white font-extrabold text-lg flex items-center justify-center">
+          <motion.div 
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: '-50px' }}
+            variants={staggerContainer}
+            className="grid grid-cols-1 md:grid-cols-3 gap-8 relative"
+          >
+            <motion.div 
+              variants={fadeInUp}
+              whileHover={{ y: -6 }}
+              className="p-8 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-center space-y-4 shadow-lg hover:shadow-xl transition-all relative group"
+            >
+              <div className="w-14 h-14 mx-auto rounded-2xl bg-brand-600 text-white font-black text-xl flex items-center justify-center shadow-lg shadow-brand-600/30 group-hover:scale-110 transition-transform">
                 1
               </div>
               <h3 className="text-lg font-bold text-slate-900 dark:text-white">Enter Your Data</h3>
               <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
                 Add your career history, projects, and skills into structured forms designed for maximum parsing accuracy.
               </p>
-            </div>
+            </motion.div>
 
-            <div className="p-8 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-center space-y-4 shadow-sm relative">
-              <div className="w-12 h-12 mx-auto rounded-full bg-brand-600 text-white font-extrabold text-lg flex items-center justify-center">
+            <motion.div 
+              variants={fadeInUp}
+              whileHover={{ y: -6 }}
+              className="p-8 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-center space-y-4 shadow-lg hover:shadow-xl transition-all relative group"
+            >
+              <div className="w-14 h-14 mx-auto rounded-2xl bg-brand-600 text-white font-black text-xl flex items-center justify-center shadow-lg shadow-brand-600/30 group-hover:scale-110 transition-transform">
                 2
               </div>
               <h3 className="text-lg font-bold text-slate-900 dark:text-white">Run AI Enhancement</h3>
               <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
                 Let Gemini AI refine your accomplishments with action metrics while calculating your real-time ATS score.
               </p>
-            </div>
+            </motion.div>
 
-            <div className="p-8 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-center space-y-4 shadow-sm relative">
-              <div className="w-12 h-12 mx-auto rounded-full bg-brand-600 text-white font-extrabold text-lg flex items-center justify-center">
+            <motion.div 
+              variants={fadeInUp}
+              whileHover={{ y: -6 }}
+              className="p-8 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-center space-y-4 shadow-lg hover:shadow-xl transition-all relative group"
+            >
+              <div className="w-14 h-14 mx-auto rounded-2xl bg-brand-600 text-white font-black text-xl flex items-center justify-center shadow-lg shadow-brand-600/30 group-hover:scale-110 transition-transform">
                 3
               </div>
               <h3 className="text-lg font-bold text-slate-900 dark:text-white">Export ATS PDF</h3>
               <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
                 Select from 5-10+ ATS-ready template designs and download a pixel-perfect, printer-friendly PDF.
               </p>
-            </div>
-          </div>
+            </motion.div>
+          </motion.div>
         </section>
 
         {/* TEMPLATE GALLERY TEASER SECTION */}
-        <section id="templates" className="py-20 bg-slate-100 dark:bg-slate-900/60 border-t border-slate-200 dark:border-slate-800 transition-colors">
+        <section id="templates" className="py-24 bg-slate-100 dark:bg-slate-900/60 border-t border-slate-200 dark:border-slate-800 transition-colors relative">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
               <div>
-                <span className="text-xs font-bold tracking-widest text-brand-600 dark:text-brand-400 uppercase">
+                <span className="text-xs font-bold tracking-widest text-brand-600 dark:text-brand-400 uppercase bg-brand-50 dark:bg-brand-950/80 px-3 py-1 rounded-full border border-brand-200 dark:border-brand-800">
                   ATS Optimized Designs
                 </span>
                 <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 dark:text-white mt-2">
                   Battle-Tested Template Architectures
                 </h2>
               </div>
-              <div className="flex items-center gap-2 overflow-x-auto pb-2">
+              <div className="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-none">
                 {templates.map((tpl) => (
                   <button
                     key={tpl.id}
                     onClick={() => setActiveTab(tpl.id)}
-                    className={`px-4 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition-all ${
+                    className={`px-4 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition-all cursor-pointer ${
                       activeTab === tpl.id
-                        ? 'bg-brand-600 text-white shadow-md'
+                        ? 'bg-brand-600 text-white shadow-lg shadow-brand-600/30 scale-105'
                         : 'bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-750'
                     }`}
                   >
@@ -405,36 +486,44 @@ export const LandingPage = () => {
             </div>
 
             {/* Selected Template Card Teaser */}
-            <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 md:p-10 shadow-lg grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+            <motion.div 
+              key={activeTab}
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.4 }}
+              className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 md:p-10 shadow-xl grid grid-cols-1 lg:grid-cols-2 gap-8 items-center"
+            >
               <div className="space-y-4">
-                <span className="px-3 py-1 rounded-full text-xs font-semibold bg-brand-100 text-brand-700 dark:bg-brand-950 dark:text-brand-300">
+                <span className="px-3 py-1 rounded-full text-xs font-bold bg-brand-100 text-brand-700 dark:bg-brand-950 dark:text-brand-300 border border-brand-200 dark:border-brand-800">
                   {templates.find(t => t.id === activeTab)?.tag}
                 </span>
-                <h3 className="text-2xl font-bold text-slate-900 dark:text-white">
+                <h3 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white">
                   {templates.find(t => t.id === activeTab)?.name} Template
                 </h3>
-                <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+                <p className="text-sm sm:text-base text-slate-600 dark:text-slate-400 leading-relaxed">
                   Engineered with standard section header tags, single-column font hierarchies, and zero non-standard graphic layers to ensure 100% readability across Taleo, Workday, and Greenhouse ATS systems.
                 </p>
-                <div className="pt-2 flex flex-wrap gap-2 text-xs font-medium text-slate-600 dark:text-slate-400">
+                <div className="pt-2 flex flex-wrap gap-3 text-xs font-semibold text-slate-600 dark:text-slate-400">
                   <span className="flex items-center gap-1.5"><CheckCircle2 className="w-4 h-4 text-emerald-500"/> Single / Multi Page Support</span>
                   <span className="flex items-center gap-1.5"><CheckCircle2 className="w-4 h-4 text-emerald-500"/> Customizable Accent Colors</span>
                   <span className="flex items-center gap-1.5"><CheckCircle2 className="w-4 h-4 text-emerald-500"/> Vector PDF Render</span>
                 </div>
-                <button
+                <motion.button
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
                   onClick={() => {
                     const selectedTpl = templates.find(t => t.id === activeTab);
                     handleAction(`Use ${selectedTpl?.name} Template`, `/dashboard?template=${selectedTpl?.id}`);
                   }}
-                  className="mt-4 px-6 py-2.5 rounded-xl bg-slate-900 dark:bg-white text-white dark:text-slate-900 font-semibold text-sm hover:opacity-90 transition-opacity shadow-md"
+                  className="mt-4 px-7 py-3 rounded-xl bg-slate-900 dark:bg-white text-white dark:text-slate-900 font-bold text-sm hover:opacity-90 transition-opacity shadow-lg cursor-pointer"
                 >
                   Use This Template
-                </button>
+                </motion.button>
               </div>
 
               {/* Template Visual Preview Container */}
-              <div className="bg-slate-100 dark:bg-slate-800 rounded-xl p-4 border border-slate-200 dark:border-slate-700 min-h-[340px] flex flex-col justify-between overflow-hidden">
-                <div className="bg-white dark:bg-slate-900 p-4 rounded-lg border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden max-h-[300px] scale-[0.85] origin-top">
+              <div className="bg-slate-100 dark:bg-slate-800 rounded-xl p-4 border border-slate-200 dark:border-slate-700 min-h-[340px] flex flex-col justify-between overflow-hidden shadow-inner">
+                <div className="bg-white dark:bg-slate-900 p-4 rounded-lg border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden max-h-[300px] scale-[0.85] origin-top transition-transform hover:scale-90 duration-300">
                   <TemplateEngine
                     templateId={activeTab}
                     resume={{
@@ -470,40 +559,54 @@ export const LandingPage = () => {
                     }}
                   />
                 </div>
-                <div className="text-right text-xs text-slate-500 dark:text-slate-400 font-mono mt-2 pt-2 border-t border-slate-200 dark:border-slate-700">
+                <div className="text-right text-xs text-slate-500 dark:text-slate-400 font-mono mt-2 pt-2 border-t border-slate-200 dark:border-slate-700 font-semibold">
                   Parsing Compatibility: <span className="text-emerald-500 font-bold">100% Passed</span>
                 </div>
               </div>
-            </div>
+            </motion.div>
           </div>
         </section>
 
         {/* CTA SECTION */}
-        <section className="py-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="rounded-3xl bg-gradient-to-r from-brand-700 via-brand-600 to-indigo-700 text-white p-8 sm:p-12 lg:p-16 text-center space-y-6 shadow-2xl relative overflow-hidden">
+        <section className="py-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <motion.div 
+            initial={{ opacity: 0, scale: 0.95 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className="rounded-3xl bg-gradient-to-r from-brand-700 via-brand-600 to-indigo-700 text-white p-8 sm:p-12 lg:p-16 text-center space-y-6 shadow-2xl relative overflow-hidden"
+          >
+            {/* Background Decorative Rings */}
+            <div className="absolute -top-24 -right-24 w-96 h-96 bg-white/10 rounded-full blur-2xl pointer-events-none" />
+            <div className="absolute -bottom-24 -left-24 w-96 h-96 bg-cyan-400/20 rounded-full blur-2xl pointer-events-none" />
+
             <div className="relative z-10 max-w-3xl mx-auto space-y-4">
-              <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight">
+              <h2 className="text-3xl sm:text-4xl md:text-5xl font-black tracking-tight">
                 Ready to Create an Industry-Leading Resume?
               </h2>
               <p className="text-brand-100 text-base sm:text-lg leading-relaxed">
                 Join thousands of tech candidates using SynapseCV to craft ATS-compliant resumes and gain an unfair advantage in their job search.
               </p>
               <div className="pt-4 flex flex-col sm:flex-row items-center justify-center gap-4">
-                <button
+                <motion.button
+                  whileHover={{ scale: 1.04 }}
+                  whileTap={{ scale: 0.98 }}
                   onClick={() => handleAction('Get Started Free', '/dashboard')}
-                  className="w-full sm:w-auto px-8 py-3.5 rounded-xl bg-white text-brand-700 hover:bg-slate-100 font-bold shadow-lg transition-colors"
+                  className="w-full sm:w-auto px-9 py-4 rounded-xl bg-white text-brand-700 hover:bg-slate-100 font-extrabold shadow-xl transition-all cursor-pointer"
                 >
                   Get Started for Free
-                </button>
-                <button
+                </motion.button>
+                <motion.button
+                  whileHover={{ scale: 1.04 }}
+                  whileTap={{ scale: 0.98 }}
                   onClick={() => handleAction('ATS Resume Analyzer', '/analyzer')}
-                  className="w-full sm:w-auto px-8 py-3.5 rounded-xl bg-brand-800/60 hover:bg-brand-800/90 border border-brand-400/40 text-white font-semibold transition-colors"
+                  className="w-full sm:w-auto px-9 py-4 rounded-xl bg-brand-800/60 hover:bg-brand-800/90 border border-brand-400/40 text-white font-bold transition-all cursor-pointer"
                 >
                   Analyze My Resume
-                </button>
+                </motion.button>
               </div>
             </div>
-          </div>
+          </motion.div>
         </section>
       </div>
     </div>
