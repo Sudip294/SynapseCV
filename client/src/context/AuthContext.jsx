@@ -166,6 +166,34 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  const forgotPassword = async (email) => {
+    try {
+      const res = await api.post('/auth/forgot-password', { email });
+      if (res.data.success) {
+        toast.success('OTP sent to your email!');
+        return { success: true };
+      }
+    } catch (error) {
+      const msg = error.response?.data?.message || error.message || 'Failed to send OTP';
+      toast.error(msg);
+      return { success: false, message: msg };
+    }
+  };
+
+  const resetPassword = async (email, otp, newPassword, confirmPassword) => {
+    try {
+      const res = await api.post('/auth/reset-password', { email, otp, newPassword, confirmPassword });
+      if (res.data.success) {
+        toast.success(res.data.message || 'Password reset successful!');
+        return { success: true };
+      }
+    } catch (error) {
+      const msg = error.response?.data?.message || error.message || 'Password reset failed';
+      toast.error(msg);
+      return { success: false, message: msg };
+    }
+  };
+
   return (
     <AuthContext.Provider
       value={{
@@ -186,6 +214,8 @@ export const AuthProvider = ({ children }) => {
         removeAvatar,
         changePassword,
         deleteAccount,
+        forgotPassword,
+        resetPassword,
       }}
     >
       {children}
