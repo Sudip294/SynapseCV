@@ -70,13 +70,24 @@ export const LandingPage = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 overflow-hidden selection:bg-brand-500 selection:text-white">
-      {/* Background Glowing Ambient Orbs */}
-      <div className="relative">
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-[500px] bg-gradient-to-b from-brand-500/15 via-indigo-500/10 to-transparent blur-3xl pointer-events-none -z-10 animate-pulse" />
-        <div className="absolute top-40 right-10 w-72 h-72 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none -z-10" />
-        <div className="absolute top-60 left-10 w-72 h-72 bg-purple-500/10 rounded-full blur-3xl pointer-events-none -z-10" />
+    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 overflow-hidden selection:bg-brand-500 selection:text-white relative">
+      
+      {/* Dynamic Animated Background Layer */}
+      <div className="fixed inset-0 pointer-events-none -z-10 overflow-hidden">
+        {/* Animated Tech Grid Pattern */}
+        <div className="absolute inset-0 bg-grid-pattern opacity-60 dark:opacity-40" />
 
+        {/* Floating Glowing Animated Blobs */}
+        <div className="absolute -top-40 -left-40 w-96 h-96 bg-brand-500/20 dark:bg-brand-500/15 rounded-full blur-3xl animate-blob" />
+        <div className="absolute top-1/3 -right-40 w-96 h-96 bg-cyan-500/20 dark:bg-cyan-500/15 rounded-full blur-3xl animate-blob animation-delay-2000" />
+        <div className="absolute top-2/3 left-1/4 w-96 h-96 bg-indigo-500/20 dark:bg-indigo-500/15 rounded-full blur-3xl animate-blob animation-delay-4000" />
+        <div className="absolute -bottom-40 right-1/3 w-96 h-96 bg-purple-500/20 dark:bg-purple-500/15 rounded-full blur-3xl animate-blob animation-delay-2000" />
+
+        {/* Ambient Top Glow Beam */}
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-[600px] bg-gradient-to-b from-brand-500/20 via-indigo-500/10 to-transparent blur-3xl pointer-events-none" />
+      </div>
+
+      <div className="relative">
         {/* HERO SECTION */}
         <section className="pt-16 pb-20 md:pt-24 md:pb-28 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
           <div className="text-center max-w-4xl mx-auto space-y-6">
