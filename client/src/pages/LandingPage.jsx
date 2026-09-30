@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useAuth } from '../context/AuthContext';
+import { AnimatedBackground } from '../components/ui/AnimatedBackground';
 import {
   Sparkles,
   FileText,
@@ -49,7 +50,16 @@ const staggerContainer = {
 
 export const LandingPage = () => {
   const [activeTab, setActiveTab] = useState('executive');
+  const [isDark, setIsDark] = useState(false);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const check = () => setIsDark(document.documentElement.classList.contains('dark'));
+    check();
+    const observer = new MutationObserver(check);
+    observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
+    return () => observer.disconnect();
+  }, []);
   const { isAuthenticated, openAuthModal } = useAuth();
 
   const handleAction = (featureName, targetRoute = '/dashboard') => {
@@ -71,21 +81,9 @@ export const LandingPage = () => {
 
   return (
     <div className="min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 overflow-hidden selection:bg-brand-500 selection:text-white relative">
-      
-      {/* Dynamic Animated Background Layer */}
-      <div className="fixed inset-0 pointer-events-none -z-10 overflow-hidden">
-        {/* Moving Tech Grid Pattern */}
-        <div className="absolute inset-0 bg-grid-pattern opacity-100" />
 
-        {/* Floating Glowing Animated Blobs */}
-        <div className="absolute -top-40 -left-40 w-[550px] h-[550px] bg-brand-500/35 dark:bg-brand-500/25 rounded-full blur-3xl animate-blob" />
-        <div className="absolute top-1/3 -right-40 w-[550px] h-[550px] bg-cyan-500/35 dark:bg-cyan-500/25 rounded-full blur-3xl animate-blob animation-delay-2000" />
-        <div className="absolute top-2/3 left-1/4 w-[550px] h-[550px] bg-indigo-500/35 dark:bg-indigo-500/25 rounded-full blur-3xl animate-blob animation-delay-4000" />
-        <div className="absolute -bottom-40 right-1/3 w-[550px] h-[550px] bg-purple-500/35 dark:bg-purple-500/25 rounded-full blur-3xl animate-blob animation-delay-2000" />
-
-        {/* Ambient Top Glow Beam */}
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-[700px] bg-gradient-to-b from-brand-500/30 via-indigo-500/15 to-transparent blur-3xl pointer-events-none" />
-      </div>
+      {/* ✦ Canvas Particle Network - Scroll & Mouse Reactive ✦ */}
+      <AnimatedBackground isDark={isDark} />
 
       <div className="relative">
         {/* HERO SECTION */}

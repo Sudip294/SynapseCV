@@ -41,48 +41,6 @@
   background: rgba(71, 85, 105, 0.8);
 }
 
-/* Background Animated Grid & Particles */
-.bg-grid-pattern {
-  background-size: 40px 40px;
-  background-image: 
-    linear-gradient(to right, rgba(99, 102, 241, 0.18) 1.5px, transparent 1.5px),
-    linear-gradient(to bottom, rgba(99, 102, 241, 0.18) 1.5px, transparent 1.5px);
-  animation: gridMove 20s linear infinite;
-}
-
-.dark .bg-grid-pattern {
-  background-size: 40px 40px;
-  background-image: 
-    linear-gradient(to right, rgba(99, 102, 241, 0.25) 1.5px, transparent 1.5px),
-    linear-gradient(to bottom, rgba(99, 102, 241, 0.25) 1.5px, transparent 1.5px);
-  animation: gridMove 20s linear infinite;
-}
-
-@keyframes gridMove {
-  0% { background-position: 0 0; }
-  100% { background-position: 40px 40px; }
-}
-
-@keyframes blob {
-  0% { transform: translate(0px, 0px) scale(1); }
-  33% { transform: translate(60px, -60px) scale(1.25); }
-  66% { transform: translate(-40px, 40px) scale(0.85); }
-  100% { transform: translate(0px, 0px) scale(1); }
-}
-
-.animate-blob {
-  animation: blob 8s infinite ease-in-out;
-}
-
-.animation-delay-2000 {
-  animation-delay: 2s;
-}
-
-.animation-delay-4000 {
-  animation-delay: 4s;
-}
-
-
 /* Print Friendly Styles for PDF Export */
 @media print {
   /* 1. Hide EVERY direct child of body except the print-only resume div */
