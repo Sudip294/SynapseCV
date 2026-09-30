@@ -1,8 +1,21 @@
 import React from 'react';
 import { SynapseLogo } from '../brand/SynapseLogo';
-import { Mail, Shield, CheckCircle2, Globe, Share2, FileText } from 'lucide-react';
+import { Linkedin, Mail, Share2, Shield, CheckCircle2 } from 'lucide-react';
+import toast from 'react-hot-toast';
 
 export const Footer = () => {
+  const handleShareLink = (e) => {
+    e.preventDefault();
+    const shareUrl = 'https://synapse-cv-project.vercel.app/';
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(shareUrl)
+        .then(() => toast.success('App link copied to clipboard!'))
+        .catch(() => toast.error('Failed to copy link'));
+    } else {
+      toast.success('App link copied to clipboard!');
+    }
+  };
+
   return (
     <footer className="bg-slate-900 text-slate-300 border-t border-slate-800">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-16">
@@ -14,15 +27,33 @@ export const Footer = () => {
               Production-grade AI resume builder and ATS analyzer SaaS engineered to help software engineers and ambitious professionals land dream roles at top tech companies.
             </p>
             <div className="flex items-center gap-4 text-slate-400 pt-2">
-              <a href="#" className="hover:text-white transition-colors" aria-label="Global Web">
-                <Globe className="w-5 h-5" />
+              <a
+                href="https://linkedin.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="p-2 rounded-lg bg-slate-800/80 hover:bg-slate-800 text-slate-300 hover:text-white transition-colors"
+                aria-label="LinkedIn"
+                title="LinkedIn"
+              >
+                <Linkedin className="w-5 h-5" />
               </a>
-              <a href="#" className="hover:text-white transition-colors" aria-label="Share">
-                <Share2 className="w-5 h-5" />
-              </a>
-              <a href="#" className="hover:text-white transition-colors" aria-label="Email">
+              <a
+                href="mailto:contact@synapsecv.com"
+                className="p-2 rounded-lg bg-slate-800/80 hover:bg-slate-800 text-slate-300 hover:text-white transition-colors"
+                aria-label="Gmail"
+                title="Gmail"
+              >
                 <Mail className="w-5 h-5" />
               </a>
+              <button
+                type="button"
+                onClick={handleShareLink}
+                className="p-2 rounded-lg bg-slate-800/80 hover:bg-slate-800 text-slate-300 hover:text-white transition-colors"
+                aria-label="Share Link"
+                title="Copy App Share Link"
+              >
+                <Share2 className="w-5 h-5" />
+              </button>
             </div>
           </div>
 
@@ -74,7 +105,7 @@ export const Footer = () => {
         </div>
 
         <div className="mt-12 pt-8 border-t border-slate-800/80 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-500 gap-4">
-          <p>© {new Date().getFullYear()} SynapseCV Inc. All rights reserved.</p>
+          <p>© {new Date().getFullYear()} SynapseCV Inc. All rights reserved. | Designed by Sudip Bag</p>
           <div className="flex gap-6">
             <a href="#" className="hover:text-slate-400 transition-colors">Privacy Policy</a>
             <a href="#" className="hover:text-slate-400 transition-colors">Terms of Service</a>
