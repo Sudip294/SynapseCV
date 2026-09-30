@@ -74,17 +74,17 @@ export const LandingPage = () => {
       
       {/* Dynamic Animated Background Layer */}
       <div className="fixed inset-0 pointer-events-none -z-10 overflow-hidden">
-        {/* Animated Tech Grid Pattern */}
-        <div className="absolute inset-0 bg-grid-pattern opacity-60 dark:opacity-40" />
+        {/* Moving Tech Grid Pattern */}
+        <div className="absolute inset-0 bg-grid-pattern opacity-100" />
 
         {/* Floating Glowing Animated Blobs */}
-        <div className="absolute -top-40 -left-40 w-96 h-96 bg-brand-500/20 dark:bg-brand-500/15 rounded-full blur-3xl animate-blob" />
-        <div className="absolute top-1/3 -right-40 w-96 h-96 bg-cyan-500/20 dark:bg-cyan-500/15 rounded-full blur-3xl animate-blob animation-delay-2000" />
-        <div className="absolute top-2/3 left-1/4 w-96 h-96 bg-indigo-500/20 dark:bg-indigo-500/15 rounded-full blur-3xl animate-blob animation-delay-4000" />
-        <div className="absolute -bottom-40 right-1/3 w-96 h-96 bg-purple-500/20 dark:bg-purple-500/15 rounded-full blur-3xl animate-blob animation-delay-2000" />
+        <div className="absolute -top-40 -left-40 w-[550px] h-[550px] bg-brand-500/35 dark:bg-brand-500/25 rounded-full blur-3xl animate-blob" />
+        <div className="absolute top-1/3 -right-40 w-[550px] h-[550px] bg-cyan-500/35 dark:bg-cyan-500/25 rounded-full blur-3xl animate-blob animation-delay-2000" />
+        <div className="absolute top-2/3 left-1/4 w-[550px] h-[550px] bg-indigo-500/35 dark:bg-indigo-500/25 rounded-full blur-3xl animate-blob animation-delay-4000" />
+        <div className="absolute -bottom-40 right-1/3 w-[550px] h-[550px] bg-purple-500/35 dark:bg-purple-500/25 rounded-full blur-3xl animate-blob animation-delay-2000" />
 
         {/* Ambient Top Glow Beam */}
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-[600px] bg-gradient-to-b from-brand-500/20 via-indigo-500/10 to-transparent blur-3xl pointer-events-none" />
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-[700px] bg-gradient-to-b from-brand-500/30 via-indigo-500/15 to-transparent blur-3xl pointer-events-none" />
       </div>
 
       <div className="relative">
