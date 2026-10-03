@@ -142,7 +142,7 @@ export const ResumeAnalyzerPage = () => {
       <div className="text-center max-w-3xl mx-auto space-y-3">
         <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-brand-50 dark:bg-brand-950/80 border border-brand-200 dark:border-brand-800 text-brand-700 dark:text-brand-300 text-xs font-semibold">
           <Sparkles className="w-4 h-4 text-brand-600 dark:text-brand-400" />
-          <span>Gemini AI ATS Resume Analyzer & Job Description Matcher</span>
+          <span>Llama-3 AI ATS Resume Analyzer & Job Description Matcher</span>
         </div>
 
         <h1 className="text-3xl sm:text-4xl font-extrabold text-slate-900 dark:text-white tracking-tight">
@@ -310,7 +310,7 @@ export const ResumeAnalyzerPage = () => {
               {analyzing ? (
                 <>
                   <Loader2 className="w-5 h-5 animate-spin" />
-                  <span>Analyzing Resume with Gemini AI...</span>
+                  <span>Analyzing Resume with Llama-3 AI...</span>
                 </>
               ) : (
                 <>
@@ -365,19 +365,19 @@ export const ResumeAnalyzerPage = () => {
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs pt-2">
                 <div className="p-2.5 rounded-xl bg-slate-100 dark:bg-slate-850 text-center">
                   <span className="text-slate-400 block text-[10px]">Summary</span>
-                  <span className="font-bold text-slate-800 dark:text-slate-200">{analysisResult.sectionAnalysis?.summary?.score || 90}%</span>
+                  <span className="font-bold text-slate-800 dark:text-slate-200">{analysisResult.sectionAnalysis?.summary?.score ?? '—'}%</span>
                 </div>
                 <div className="p-2.5 rounded-xl bg-slate-100 dark:bg-slate-850 text-center">
                   <span className="text-slate-400 block text-[10px]">Experience</span>
-                  <span className="font-bold text-slate-800 dark:text-slate-200">{analysisResult.sectionAnalysis?.experience?.score || 85}%</span>
+                  <span className="font-bold text-slate-800 dark:text-slate-200">{analysisResult.sectionAnalysis?.experience?.score ?? '—'}%</span>
                 </div>
                 <div className="p-2.5 rounded-xl bg-slate-100 dark:bg-slate-850 text-center">
                   <span className="text-slate-400 block text-[10px]">Skills</span>
-                  <span className="font-bold text-slate-800 dark:text-slate-200">{analysisResult.sectionAnalysis?.skills?.score || 92}%</span>
+                  <span className="font-bold text-slate-800 dark:text-slate-200">{analysisResult.sectionAnalysis?.skills?.score ?? '—'}%</span>
                 </div>
                 <div className="p-2.5 rounded-xl bg-slate-100 dark:bg-slate-850 text-center">
                   <span className="text-slate-400 block text-[10px]">Education</span>
-                  <span className="font-bold text-slate-800 dark:text-slate-200">{analysisResult.sectionAnalysis?.education?.score || 88}%</span>
+                  <span className="font-bold text-slate-800 dark:text-slate-200">{analysisResult.sectionAnalysis?.education?.score ?? '—'}%</span>
                 </div>
               </div>
             </div>
