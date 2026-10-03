@@ -98,7 +98,7 @@ export const LandingPage = () => {
               className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-brand-50 dark:bg-brand-950/80 border border-brand-200 dark:border-brand-800 text-brand-700 dark:text-brand-300 text-xs font-semibold tracking-wide"
             >
               <Sparkles className="w-4 h-4 text-brand-600 dark:text-brand-400 animate-pulse" />
-              <span>Next-Generation Resume Engine Powered by Llama-3 AI</span>
+              <span>Next-Generation Resume Engine Powered by GPT-OSS 120B AI</span>
             </motion.div>
 
             {/* Main Headline */}
@@ -224,7 +224,7 @@ export const LandingPage = () => {
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2 text-brand-700 dark:text-brand-300 text-xs font-bold uppercase tracking-wider">
                       <Cpu className="w-4 h-4 animate-spin" style={{ animationDuration: '6s' }} />
-                      <span>Llama-3 AI Actionable Improvement</span>
+                      <span>GPT-OSS 120B AI Actionable Improvement</span>
                     </div>
                     <span className="text-[11px] text-brand-600 dark:text-brand-400 font-bold bg-brand-100 dark:bg-brand-900 px-2 py-0.5 rounded-md">+12 ATS Points</span>
                   </div>
@@ -335,7 +335,7 @@ export const LandingPage = () => {
                 </div>
                 <h3 className="text-lg font-bold text-slate-900 dark:text-white group-hover:text-brand-600 dark:group-hover:text-brand-400 transition-colors">AI Content Refinement</h3>
                 <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
-                  Transform raw bullet points into quantifiable, high-impact statements using Llama-3 AI, strictly grounded in your actual experience.
+                  Transform raw bullet points into quantifiable, high-impact statements using GPT-OSS 120B AI, strictly grounded in your actual experience.
                 </p>
               </motion.div>
 
@@ -467,7 +467,7 @@ export const LandingPage = () => {
               </div>
               <h3 className="text-lg font-bold text-slate-900 dark:text-white">Run AI Enhancement</h3>
               <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
-                Let Llama-3 AI refine your accomplishments with action metrics while calculating your real-time ATS score.
+                Let GPT-OSS 120B AI refine your accomplishments with action metrics while calculating your real-time ATS score.
               </p>
             </motion.div>
 
