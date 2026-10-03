@@ -19,55 +19,19 @@ export const createResume = async (req, res, next) => {
       github: personalInfo?.github || req.user.socialLinks?.github || '',
     };
 
+    const resumeTitle = title || (targetRole ? `${targetRole} Resume` : 'Untitled Resume');
+
     const resume = await Resume.create({
       user: req.user._id,
-      title: title || 'Software Engineer Resume',
+      title: resumeTitle,
       targetRole: targetRole || '',
       templateId: templateId || 'executive',
       personalInfo: initialPersonalInfo,
-      summary: req.user.bio || 'Results-driven software engineer with expertise in building scalable web applications and distributed backend systems.',
-      experience: [
-        {
-          company: 'Tech Solutions Inc.',
-          position: 'Software Engineer',
-          location: 'San Francisco, CA',
-          startDate: 'Jan 2022',
-          endDate: 'Present',
-          current: true,
-          description: 'Architected high-throughput microservices using Node.js and MongoDB.\nReduced p99 database query response latency by 35%.',
-        },
-      ],
-      education: [
-        {
-          institution: 'State University',
-          degree: 'Bachelor of Science',
-          fieldOfStudy: 'Computer Science',
-          location: 'San Francisco, CA',
-          startDate: '2018',
-          endDate: '2022',
-          gpa: '3.8/4.0',
-          description: 'Relevant Coursework: Data Structures, Algorithms, Distributed Systems.',
-        },
-      ],
-      skills: [
-        {
-          category: 'Languages & Core',
-          items: ['JavaScript', 'TypeScript', 'Node.js', 'Python', 'HTML5/CSS3'],
-        },
-        {
-          category: 'Frameworks & Databases',
-          items: ['React.js', 'Express.js', 'MongoDB', 'PostgreSQL', 'Tailwind CSS'],
-        },
-      ],
-      projects: [
-        {
-          title: 'Real-Time Analytics Dashboard',
-          description: 'Designed a low-latency web portal processing 10k events/sec.',
-          technologies: ['React', 'Node.js', 'WebSockets', 'Tailwind CSS'],
-          link: 'https://example.com/demo',
-          github: 'https://github.com/example/repo',
-        },
-      ],
+      summary: req.user.bio || '',
+      experience: [],
+      education: [],
+      skills: [],
+      projects: [],
       certifications: [],
       achievements: [],
       languages: [

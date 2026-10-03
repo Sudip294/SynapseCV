@@ -12,9 +12,20 @@ import {
   Briefcase, 
   Loader2, 
   Search,
-  ExternalLink
+  ExternalLink,
+  X,
+  Wand2
 } from 'lucide-react';
 import toast from 'react-hot-toast';
+
+// Common job roles for quick selection
+const QUICK_ROLES = [
+  'Software Engineer', 'Frontend Developer', 'Backend Developer', 'Full Stack Developer',
+  'Data Scientist', 'Data Analyst', 'Machine Learning Engineer', 'DevOps Engineer',
+  'Product Manager', 'UX/UI Designer', 'Graphic Designer', 'Marketing Manager',
+  'Business Analyst', 'Project Manager', 'Sales Manager', 'HR Manager',
+  'Content Writer', 'Financial Analyst', 'Cybersecurity Analyst', 'Cloud Architect',
+];
 
 export const DashboardPage = () => {
   const [resumes, setResumes] = useState([]);
@@ -23,6 +34,12 @@ export const DashboardPage = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
+
+  // New Resume Modal state
+  const [showNewResumeModal, setShowNewResumeModal] = useState(false);
+  const [newResumeRole, setNewResumeRole] = useState('');
+  const [roleInputFocused, setRoleInputFocused] = useState(false);
+  const [roleFilter, setRoleFilter] = useState('');
 
   const templateParam = searchParams.get('template');
 
@@ -43,20 +60,32 @@ export const DashboardPage = () => {
     fetchResumes();
   }, []);
 
-  const handleCreateResume = async (overrideTemplateId = null) => {
-    // If handleCreateResume is passed directly as onClick handler, overrideTemplateId will be a SyntheticEvent object
-    const validTemplateId = (typeof overrideTemplateId === 'string' && overrideTemplateId) 
-      ? overrideTemplateId 
-      : (templateParam || 'executive');
+  const openNewResumeModal = () => {
+    setNewResumeRole('');
+    setRoleFilter('');
+    setShowNewResumeModal(true);
+  };
+
+  const handleCreateResume = async () => {
+    const role = newResumeRole.trim();
+    if (!role) {
+      toast.error('Please enter your target role or position.');
+      return;
+    }
+
+    const templateId = templateParam || 'executive';
+    const resumeTitle = `${role} Resume`;
 
     setCreating(true);
     try {
       const res = await api.post('/resumes', {
-        title: 'Software Engineer Resume',
-        templateId: validTemplateId,
+        title: resumeTitle,
+        targetRole: role,
+        templateId,
       });
       if (res.data.success) {
-        toast.success('New resume draft initialized!');
+        toast.success(`"${resumeTitle}" created successfully!`);
+        setShowNewResumeModal(false);
         navigate(`/builder/${res.data.resume._id}`);
       }
     } catch (error) {
@@ -100,6 +129,10 @@ export const DashboardPage = () => {
       r.targetRole?.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
+  const filteredQuickRoles = QUICK_ROLES.filter(r =>
+    r.toLowerCase().includes(roleFilter.toLowerCase())
+  );
+
   return (
     <div className="min-h-screen py-10 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto space-y-8">
       
@@ -113,7 +146,7 @@ export const DashboardPage = () => {
         </div>
 
         <button
-          onClick={() => handleCreateResume()}
+          onClick={openNewResumeModal}
           disabled={creating}
           className="px-6 py-3 rounded-xl bg-brand-600 hover:bg-brand-700 text-white font-semibold text-sm shadow-md shadow-brand-600/20 transition-all flex items-center justify-center gap-2 disabled:opacity-50"
         >
@@ -156,7 +189,7 @@ export const DashboardPage = () => {
           </div>
           {!searchQuery && (
             <button
-              onClick={() => handleCreateResume()}
+              onClick={openNewResumeModal}
               className="px-6 py-2.5 rounded-xl bg-brand-600 text-white font-semibold text-sm hover:bg-brand-700 transition-colors inline-flex items-center gap-2"
             >
               <Plus className="w-4 h-4" />
@@ -188,7 +221,7 @@ export const DashboardPage = () => {
                   </h3>
                   <p className="text-xs text-slate-500 flex items-center gap-1.5 mt-1">
                     <Briefcase className="w-3.5 h-3.5" />
-                    <span>{resume.targetRole || 'Software Engineering'}</span>
+                    <span>{resume.targetRole || 'General'}</span>
                   </p>
                 </div>
               </div>
@@ -218,6 +251,113 @@ export const DashboardPage = () => {
               </div>
             </div>
           ))}
+        </div>
+      )}
+
+      {/* ─────────────────────────────────────────────────── */}
+      {/* NEW RESUME ROLE MODAL */}
+      {/* ─────────────────────────────────────────────────── */}
+      {showNewResumeModal && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm"
+          onClick={(e) => { if (e.target === e.currentTarget) setShowNewResumeModal(false); }}
+        >
+          <div className="w-full max-w-md bg-white dark:bg-slate-900 rounded-2xl shadow-2xl border border-slate-200 dark:border-slate-700 overflow-hidden">
+            
+            {/* Modal Header */}
+            <div className="flex items-center justify-between px-6 py-5 border-b border-slate-200 dark:border-slate-800">
+              <div className="flex items-center gap-3">
+                <div className="w-9 h-9 rounded-xl bg-brand-50 dark:bg-brand-950 text-brand-600 dark:text-brand-400 flex items-center justify-center">
+                  <Wand2 className="w-5 h-5" />
+                </div>
+                <div>
+                  <h2 className="text-base font-bold text-slate-900 dark:text-white">Create New Resume</h2>
+                  <p className="text-xs text-slate-500 dark:text-slate-400">AI will tailor suggestions to your role</p>
+                </div>
+              </div>
+              <button
+                onClick={() => setShowNewResumeModal(false)}
+                className="p-2 rounded-lg text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            {/* Modal Body */}
+            <div className="px-6 py-6 space-y-5">
+              
+              {/* Role Input */}
+              <div className="space-y-2">
+                <label className="text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300 flex items-center gap-2">
+                  <Briefcase className="w-4 h-4 text-brand-600" />
+                  Target Role / Job Position
+                </label>
+                <input
+                  type="text"
+                  placeholder="e.g. Graphic Designer, Data Scientist, Marketing Manager..."
+                  value={newResumeRole}
+                  onChange={(e) => {
+                    setNewResumeRole(e.target.value);
+                    setRoleFilter(e.target.value);
+                  }}
+                  onFocus={() => setRoleInputFocused(true)}
+                  onBlur={() => setTimeout(() => setRoleInputFocused(false), 150)}
+                  onKeyDown={(e) => { if (e.key === 'Enter') handleCreateResume(); }}
+                  className="w-full px-4 py-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-sm text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-brand-500 transition"
+                  autoFocus
+                />
+                <p className="text-[11px] text-slate-400">
+                  Resume will be saved as: <span className="font-semibold text-brand-600 dark:text-brand-400">{newResumeRole.trim() ? `${newResumeRole.trim()} Resume` : '(your role) Resume'}</span>
+                </p>
+              </div>
+
+              {/* Quick Role Pills */}
+              <div className="space-y-2">
+                <p className="text-[11px] font-semibold uppercase tracking-wider text-slate-400">Quick Select</p>
+                <div className="flex flex-wrap gap-1.5 max-h-36 overflow-y-auto pr-1">
+                  {filteredQuickRoles.map((role) => (
+                    <button
+                      key={role}
+                      type="button"
+                      onClick={() => {
+                        setNewResumeRole(role);
+                        setRoleFilter(role);
+                      }}
+                      className={`px-2.5 py-1 rounded-lg text-xs font-medium border transition-all ${
+                        newResumeRole === role
+                          ? 'bg-brand-600 text-white border-brand-600'
+                          : 'bg-slate-50 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-700 hover:border-brand-400 hover:text-brand-600 dark:hover:text-brand-400'
+                      }`}
+                    >
+                      {role}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+            </div>
+
+            {/* Modal Footer */}
+            <div className="px-6 pb-6 flex gap-3">
+              <button
+                onClick={() => setShowNewResumeModal(false)}
+                className="flex-1 px-4 py-3 rounded-xl border border-slate-300 dark:border-slate-700 text-sm font-semibold text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleCreateResume}
+                disabled={!newResumeRole.trim() || creating}
+                className="flex-1 px-4 py-3 rounded-xl bg-brand-600 hover:bg-brand-700 text-white font-semibold text-sm shadow-md shadow-brand-600/20 transition-all flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {creating ? (
+                  <><Loader2 className="w-4 h-4 animate-spin" /><span>Creating...</span></>
+                ) : (
+                  <><Sparkles className="w-4 h-4" /><span>Create Resume</span></>
+                )}
+              </button>
+            </div>
+          </div>
         </div>
       )}
 

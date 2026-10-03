@@ -8,7 +8,7 @@ import {
   analyzeResumeAI,
 } from '../services/aiService.js';
 
-// @desc    Enhance resume executive summary using Gemini AI
+// @desc    Enhance resume executive summary using Llama-3 AI
 // @route   POST /api/ai/enhance-summary
 // @access  Private
 export const enhanceSummary = async (req, res, next) => {
@@ -24,7 +24,7 @@ export const enhanceSummary = async (req, res, next) => {
   }
 };
 
-// @desc    Enhance experience bullet point text using Gemini AI
+// @desc    Enhance experience bullet point text using Llama-3 AI
 // @route   POST /api/ai/enhance-bullet
 // @access  Private
 export const enhanceBullet = async (req, res, next) => {
@@ -40,7 +40,7 @@ export const enhanceBullet = async (req, res, next) => {
   }
 };
 
-// @desc    Suggest technical and soft skills for a target role using Gemini AI
+// @desc    Suggest technical and soft skills for a target role using Llama-3 AI
 // @route   POST /api/ai/suggest-skills
 // @access  Private
 export const suggestSkills = async (req, res, next) => {
@@ -56,7 +56,7 @@ export const suggestSkills = async (req, res, next) => {
   }
 };
 
-// @desc    Generate a structured resume starter draft using Gemini AI
+// @desc    Generate a structured resume starter draft using Llama-3 AI
 // @route   POST /api/ai/generate-draft
 // @access  Private
 export const generateDraft = async (req, res, next) => {
@@ -72,7 +72,7 @@ export const generateDraft = async (req, res, next) => {
   }
 };
 
-// @desc    Analyze resume content & optional job description using Gemini AI (structured DB data)
+// @desc    Analyze resume content & optional job description using Llama-3 AI (structured DB data)
 // @route   POST /api/ai/analyze-resume
 // @access  Private
 export const analyzeResume = async (req, res, next) => {

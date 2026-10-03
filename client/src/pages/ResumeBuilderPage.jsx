@@ -91,18 +91,27 @@ export const ResumeBuilderPage = () => {
 
   // AI Summary Enhancer
   const handleAiEnhanceSummary = async () => {
+    const targetRole = resume.targetRole || resume.personalInfo?.title || '';
+    if (!targetRole) {
+      toast.error('Please set a target role in your resume title or Personal Info before using AI.');
+      return;
+    }
+    if (!resume.summary || resume.summary.trim().length < 10) {
+      toast.error('Please write at least a brief summary before using AI to enhance it.');
+      return;
+    }
     setAiLoading(true);
     try {
       const res = await api.post('/ai/enhance-summary', {
         summary: resume.summary,
-        targetRole: resume.personalInfo?.title || resume.targetRole || 'Software Engineer',
+        targetRole,
       });
       if (res.data.success && res.data.data.enhancedSummary) {
         setResume((prev) => ({ ...prev, summary: res.data.data.enhancedSummary }));
-        toast.success('Executive summary optimized with Gemini AI!');
+        toast.success('Executive summary optimized with AI!');
       }
     } catch (error) {
-      toast.error('AI Summary optimization failed');
+      toast.error(error.response?.data?.message || 'AI Summary optimization failed');
     } finally {
       setAiLoading(false);
     }
@@ -112,20 +121,24 @@ export const ResumeBuilderPage = () => {
   const handleAiEnhanceBullet = async (index) => {
     const exp = resume.experience[index];
     if (!exp) return;
-
+    if (!exp.description || exp.description.trim().length < 5) {
+      toast.error('Please write some experience description before using AI to enhance it.');
+      return;
+    }
+    const targetRole = resume.targetRole || resume.personalInfo?.title || '';
     setAiLoading(true);
     try {
       const res = await api.post('/ai/enhance-bullet', {
         bulletText: exp.description,
         position: exp.position,
-        targetRole: resume.personalInfo?.title || 'Software Engineer',
+        targetRole,
       });
       if (res.data.success && res.data.data.enhancedBullet) {
         updateExperience(index, 'description', res.data.data.enhancedBullet);
-        toast.success('Experience bullets improved with Gemini AI!');
+        toast.success('Experience bullets improved with AI!');
       }
     } catch (error) {
-      toast.error('AI Bullet optimization failed');
+      toast.error(error.response?.data?.message || 'AI Bullet optimization failed');
     } finally {
       setAiLoading(false);
     }
@@ -133,19 +146,24 @@ export const ResumeBuilderPage = () => {
 
   // AI Skill Recommender
   const handleAiSuggestSkills = async () => {
+    const targetRole = resume.targetRole || resume.personalInfo?.title || '';
+    if (!targetRole) {
+      toast.error('Please set a target role in your resume before requesting AI skill suggestions.');
+      return;
+    }
     setAiLoading(true);
     try {
       const allCurrentSkills = (resume.skills || []).flatMap((s) => s.items || []);
       const res = await api.post('/ai/suggest-skills', {
-        targetRole: resume.personalInfo?.title || resume.targetRole || 'Software Engineer',
+        targetRole,
         existingSkills: allCurrentSkills,
       });
       if (res.data.success && res.data.data.suggestedSkills) {
         setSuggestedSkills(res.data.data.suggestedSkills);
-        toast.success('Fetched AI skill recommendations');
+        toast.success(`AI suggested skills for ${targetRole}`);
       }
     } catch (error) {
-      toast.error('Failed to fetch skill recommendations');
+      toast.error(error.response?.data?.message || 'Failed to fetch skill recommendations');
     } finally {
       setAiLoading(false);
     }
