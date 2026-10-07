@@ -13,7 +13,9 @@ import { ProtectedRoute } from './components/auth/ProtectedRoute';
 import { AuthModal } from './components/auth/AuthModal';
 import { Toaster } from 'react-hot-toast';
 import { ScrollToTop } from './components/ui/ScrollToTop';
-
+import { PrivacyPolicyPage } from './pages/PrivacyPolicyPage';
+import { TermsOfServicePage } from './pages/TermsOfServicePage';
+import { SecurityPage } from './pages/SecurityPage';
 export const App = () => {
   return (
     <ThemeProvider>
@@ -56,6 +58,9 @@ export const App = () => {
                     </ProtectedRoute>
                   }
                 />
+                <Route path="/privacy" element={<PrivacyPolicyPage />} />
+                <Route path="/terms" element={<TermsOfServicePage />} />
+                <Route path="/security" element={<SecurityPage />} />
                 <Route path="*" element={<LandingPage />} />
               </Routes>
             </main>

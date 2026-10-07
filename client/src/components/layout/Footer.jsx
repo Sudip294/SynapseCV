@@ -1,6 +1,7 @@
 import React from 'react';
 import { SynapseLogo } from '../brand/SynapseLogo';
 import { Mail, Share2, Shield, CheckCircle2 } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import toast from 'react-hot-toast';
 
 // LinkedIn SVG icon (not available in this version of lucide-react)
@@ -120,9 +121,9 @@ export const Footer = () => {
         <div className="mt-12 pt-8 border-t border-slate-800/80 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-500 gap-4">
           <p>© {new Date().getFullYear()} SynapseCV Inc. All rights reserved. | Designed by Sudip Bag.</p>
           <div className="flex gap-6">
-            <a href="#" className="hover:text-slate-400 transition-colors">Privacy Policy</a>
-            <a href="#" className="hover:text-slate-400 transition-colors">Terms of Service</a>
-            <a href="#" className="hover:text-slate-400 transition-colors">Security</a>
+            <Link to="/privacy" className="hover:text-slate-400 transition-colors">Privacy Policy</Link>
+            <Link to="/terms" className="hover:text-slate-400 transition-colors">Terms of Service</Link>
+            <Link to="/security" className="hover:text-slate-400 transition-colors">Security</Link>
           </div>
         </div>
       </div>
