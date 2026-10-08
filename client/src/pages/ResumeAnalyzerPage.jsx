@@ -136,7 +136,7 @@ export const ResumeAnalyzerPage = () => {
   };
 
   return (
-    <div className="relative min-h-screen overflow-hidden z-0">
+    <div className="relative min-h-screen z-0">
       {/* Animated Pattern Wallpaper Background for Analyzer */}
       <div className="fixed inset-0 pointer-events-none z-0 bg-pattern-analyzer animate-pan opacity-80 mix-blend-multiply dark:mix-blend-screen" />
 
