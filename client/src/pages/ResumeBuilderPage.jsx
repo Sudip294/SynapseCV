@@ -339,7 +339,7 @@ export const ResumeBuilderPage = () => {
   }
 
   return (
-    <div className="relative min-h-screen flex flex-col overflow-hidden z-0">
+    <div className="relative min-h-screen flex flex-col z-0">
       {/* Animated Pattern Wallpaper Background for Builder */}
       <div className="fixed inset-0 pointer-events-none z-0 bg-pattern-builder animate-pan opacity-80 mix-blend-multiply dark:mix-blend-screen" />
 
@@ -347,12 +347,12 @@ export const ResumeBuilderPage = () => {
       
       {/* TOP WORKSPACE BAR */}
       <header className="sticky top-16 z-30 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 px-4 py-3 no-print">
-        <div className="max-w-7xl mx-auto flex items-center justify-between gap-4">
+        <div className="max-w-7xl mx-auto flex flex-wrap sm:flex-nowrap items-center justify-between gap-4">
           
-          <div className="flex items-center gap-3">
+          <div className="flex flex-1 items-center gap-2 sm:gap-3 min-w-[120px] max-w-[50%]">
             <Link
               to="/dashboard"
-              className="p-2 rounded-xl text-slate-500 hover:text-slate-900 dark:hover:text-slate-100 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+              className="p-2 flex-shrink-0 rounded-xl text-slate-500 hover:text-slate-900 dark:hover:text-slate-100 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
             >
               <ArrowLeft className="w-5 h-5" />
             </Link>
@@ -361,27 +361,30 @@ export const ResumeBuilderPage = () => {
               type="text"
               value={resume.title}
               onChange={(e) => setResume({ ...resume, title: e.target.value })}
-              className="font-bold text-base bg-transparent border-b border-transparent hover:border-slate-300 focus:border-brand-500 focus:outline-none px-1 text-slate-900 dark:text-white"
+              className="font-bold text-base bg-transparent border-b border-transparent hover:border-slate-300 focus:border-brand-500 focus:outline-none px-1 text-slate-900 dark:text-white w-full text-ellipsis"
+              placeholder="e.g. Senior Software Engineer"
             />
           </div>
 
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 flex-wrap justify-end flex-shrink-0">
             {/* Change Template Button */}
             <button
               onClick={() => setGalleryOpen(true)}
               className="px-3 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 font-semibold text-xs transition-colors flex items-center gap-1.5"
+              title="Change Template"
             >
               <Layout className="w-4 h-4 text-brand-600" />
-              <span>Template: <strong className="capitalize">{resume.templateId || 'Executive'}</strong></span>
+              <span className="hidden lg:inline">Template: <strong className="capitalize">{resume.templateId || 'Executive'}</strong></span>
             </button>
 
             {/* Print / Export PDF Button */}
             <button
               onClick={handlePrint}
               className="px-3 py-2 rounded-xl bg-emerald-50 dark:bg-emerald-950/60 hover:bg-emerald-100 border border-emerald-200 dark:border-emerald-800 text-emerald-700 dark:text-emerald-300 font-semibold text-xs transition-colors flex items-center gap-1.5"
+              title="Export PDF / Print"
             >
               <Printer className="w-4 h-4" />
-              <span>Export PDF / Print</span>
+              <span className="hidden lg:inline">Export PDF</span>
             </button>
 
             {/* Mobile View Toggle */}
@@ -403,10 +406,11 @@ export const ResumeBuilderPage = () => {
             <button
               onClick={() => handleSave()}
               disabled={saving}
-              className="px-5 py-2 rounded-xl bg-brand-600 hover:bg-brand-700 text-white font-semibold text-xs shadow-md transition-colors flex items-center gap-1.5 disabled:opacity-50"
+              className="px-4 sm:px-5 py-2 rounded-xl bg-brand-600 hover:bg-brand-700 text-white font-semibold text-xs shadow-md transition-colors flex items-center gap-1.5 disabled:opacity-50"
+              title="Save Resume"
             >
               {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
-              <span>Save Resume</span>
+              <span className="hidden sm:inline">Save Resume</span>
             </button>
           </div>
 
@@ -859,8 +863,8 @@ export const ResumeBuilderPage = () => {
         </div>
 
         {/* RIGHT PANEL: LIVE PREVIEW CONTAINER */}
-        <div className={`md:col-span-6 lg:col-span-6 ${mobileView === 'editor' ? 'hidden md:block' : 'block'}`}>
-          <div className="sticky top-32 space-y-4">
+        <div className={`md:col-span-6 lg:col-span-6 w-full ${mobileView === 'editor' ? 'hidden md:block' : 'block'}`}>
+          <div className="md:sticky md:top-32 space-y-4">
             <div className="flex items-center justify-between text-xs text-slate-500 font-semibold px-2 no-print">
               <span className="flex items-center gap-1.5">
                 <Eye className="w-4 h-4 text-brand-600" /> Live Resume Preview
@@ -876,9 +880,11 @@ export const ResumeBuilderPage = () => {
             {/* Paper Container */}
             <div 
               id="resume-preview" 
-              className="rounded-2xl border border-slate-200 dark:border-slate-800 shadow-xl overflow-hidden bg-slate-200 dark:bg-slate-900 p-4 max-h-[80vh] overflow-y-auto"
+              className="w-full rounded-2xl border border-slate-200 dark:border-slate-800 shadow-xl bg-slate-200 dark:bg-slate-900 p-4 max-h-[85vh] overflow-auto custom-scrollbar"
             >
-              <TemplateEngine resume={resume} templateId={resume.templateId} />
+              <div className="w-full mx-auto">
+                <TemplateEngine resume={resume} templateId={resume.templateId} />
+              </div>
             </div>
           </div>
         </div>
