@@ -136,10 +136,14 @@ export const ResumeAnalyzerPage = () => {
   };
 
   return (
-    <div className="min-h-screen py-10 px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto space-y-8">
-      
-      {/* HEADER SECTION */}
-      <div className="text-center max-w-3xl mx-auto space-y-3">
+    <div className="relative min-h-screen overflow-hidden z-0">
+      {/* Animated Pattern Wallpaper Background for Analyzer */}
+      <div className="fixed inset-0 pointer-events-none z-0 bg-pattern-analyzer animate-pan opacity-80 mix-blend-multiply dark:mix-blend-screen" />
+
+      <div className="py-10 px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto space-y-8 relative z-10">
+        
+        {/* HEADER SECTION */}
+        <div className="text-center max-w-3xl mx-auto space-y-3">
         <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-brand-50 dark:bg-brand-950/80 border border-brand-200 dark:border-brand-800 text-brand-700 dark:text-brand-300 text-xs font-semibold">
           <Sparkles className="w-4 h-4 text-brand-600 dark:text-brand-400" />
           <span>GPT-OSS 120B AI ATS Resume Analyzer & Job Description Matcher</span>
@@ -501,6 +505,7 @@ export const ResumeAnalyzerPage = () => {
         </div>
       )}
 
+      </div>
     </div>
   );
 };
