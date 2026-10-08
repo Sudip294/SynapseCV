@@ -41,8 +41,18 @@
   background: rgba(71, 85, 105, 0.8);
 }
 
+/* Hide the print-only resume from the screen entirely */
+#resume-print-only {
+  display: none;
+}
+
 /* Print Friendly Styles for PDF Export */
 @media print {
+  html, body {
+    background-color: white !important;
+    background-image: none !important;
+  }
+
   /* 1. Hide EVERY direct child of body except the print-only resume div */
   /*    display:none takes zero space — no blank pages from hidden content */
   body > *:not(#resume-print-only) {
