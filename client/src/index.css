@@ -76,3 +76,9 @@
 
 
 
+
+/* Google Translate UI Overrides */
+.goog-te-banner-frame { display: none !important; }
+body { top: 0 !important; }
+.VIpgJd-ZVi9od-ORHb-OEVmcd { display: none !important; }
+
