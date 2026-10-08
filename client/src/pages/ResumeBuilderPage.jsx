@@ -339,10 +339,14 @@ export const ResumeBuilderPage = () => {
   }
 
   return (
-    <div className="min-h-screen bg-slate-100 dark:bg-slate-950 flex flex-col">
+    <div className="relative min-h-screen flex flex-col overflow-hidden z-0">
+      {/* Animated Pattern Wallpaper Background for Builder */}
+      <div className="fixed inset-0 pointer-events-none z-0 bg-pattern-builder animate-pan opacity-80 mix-blend-multiply dark:mix-blend-screen" />
+
+      <div className="flex flex-col flex-grow relative z-10">
       
       {/* TOP WORKSPACE BAR */}
-      <header className="sticky top-16 z-30 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 px-4 py-3 no-print">
+      <header className="sticky top-16 z-30 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 px-4 py-3 no-print">
         <div className="max-w-7xl mx-auto flex items-center justify-between gap-4">
           
           <div className="flex items-center gap-3">
@@ -898,6 +902,7 @@ export const ResumeBuilderPage = () => {
         document.body
       )}
 
+      </div>
     </div>
   );
 };
