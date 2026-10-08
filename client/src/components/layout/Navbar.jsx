@@ -3,14 +3,71 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useTheme } from '../../context/ThemeContext';
 import { useAuth } from '../../context/AuthContext';
 import { SynapseLogo } from '../brand/SynapseLogo';
-import { Sun, Moon, Menu, X, ArrowRight, Sparkles, User, LogOut, ChevronDown, FileText } from 'lucide-react';
+import { Sun, Moon, Menu, X, ArrowRight, Sparkles, User, LogOut, ChevronDown, FileText, CheckCircle2 } from 'lucide-react';
+import { initGoogleTranslate } from '../../utils/translator';
+
+const GoogleTranslateIcon = ({ className }) => (
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className={className}>
+    <path d="M12.87 15.07l-2.54-2.51.03-.03A17.52 17.52 0 0 0 14.07 6H17V4h-7V2H8v2H1v2h11.17C11.5 7.92 10.44 9.75 9 11.35 8.07 10.32 7.3 9.19 6.69 8h-2c.73 1.63 1.73 3.17 2.98 4.56l-5.09 5.02L4 19l5-5 3.11 3.11.76-2.04zM18.5 10h-2L12 22h2l1.12-3h4.75L21 22h2l-4.5-12zm-2.62 7l1.62-4.33L19.12 17h-3.24z"/>
+  </svg>
+);
 
 export const Navbar = () => {
   const { theme, toggleTheme } = useTheme();
   const { user, isAuthenticated, logout, openAuthModal } = useAuth();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
+  const [isLangMenuOpen, setIsLangMenuOpen] = useState(false);
+  const [currentLang, setCurrentLang] = useState('en');
   const navigate = useNavigate();
+
+  React.useEffect(() => {
+    initGoogleTranslate();
+    
+    // Check current language from cookie if available
+    const match = document.cookie.match(/googtrans=\/en\/([^;]+)/);
+    if (match) {
+      setCurrentLang(match[1]);
+    }
+  }, []);
+
+  const handleLanguageChange = (langCode) => {
+    setCurrentLang(langCode);
+    setIsLangMenuOpen(false);
+    
+    if (langCode === 'en') {
+      // Clear translation
+      document.cookie = 'googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+      document.cookie = `googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; domain=${window.location.hostname}; path=/;`;
+    } else {
+      document.cookie = `googtrans=/en/${langCode}; path=/;`;
+      document.cookie = `googtrans=/en/${langCode}; domain=${window.location.hostname}; path=/;`;
+    }
+    window.location.reload();
+  };
+
+  const languages = [
+    { code: 'en', label: 'English' },
+    { code: 'zh-CN', label: '中文 (Chinese)' },
+    { code: 'hi', label: 'हिन्दी (Hindi)' },
+    { code: 'es', label: 'Español (Spanish)' },
+    { code: 'fr', label: 'Français (French)' },
+    { code: 'ar', label: 'العربية (Arabic)' },
+    { code: 'bn', label: 'বাংলা (Bengali)' },
+    { code: 'ru', label: 'Русский (Russian)' },
+    { code: 'pt', label: 'Português (Portuguese)' },
+    { code: 'id', label: 'Bahasa Indonesia' },
+    { code: 'ur', label: 'اردو (Urdu)' },
+    { code: 'de', label: 'Deutsch (German)' },
+    { code: 'ja', label: '日本語 (Japanese)' },
+    { code: 'ko', label: '한국어 (Korean)' },
+    { code: 'tr', label: 'Türkçe (Turkish)' },
+    { code: 'vi', label: 'Tiếng Việt (Vietnamese)' },
+    { code: 'it', label: 'Italiano (Italian)' },
+    { code: 'th', label: 'ไทย (Thai)' },
+    { code: 'pl', label: 'Polski (Polish)' },
+    { code: 'nl', label: 'Nederlands (Dutch)' },
+  ];
 
   const handleProtectedAction = (featureName, targetRoute = null) => {
     if (isAuthenticated) {
@@ -74,6 +131,36 @@ export const Navbar = () => {
 
         {/* Desktop Actions */}
         <div className="hidden md:flex items-center gap-3">
+          {/* Language Selector */}
+          <div className="relative">
+            <button
+              onClick={() => setIsLangMenuOpen(!isLangMenuOpen)}
+              className="p-2 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-850 transition-colors flex items-center gap-1.5"
+              aria-label="Select Language"
+              title="Select Language"
+            >
+              <GoogleTranslateIcon className="w-5 h-5 text-slate-600 dark:text-slate-300" />
+              <span className="text-xs font-semibold uppercase">{currentLang === 'zh-CN' ? 'ZH' : currentLang.slice(0, 2)}</span>
+            </button>
+
+            {isLangMenuOpen && (
+              <div className="absolute right-0 mt-2 w-40 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-xl py-2 z-50 text-slate-900 dark:text-white max-h-64 overflow-y-auto">
+                {languages.map((lang) => (
+                  <button
+                    key={lang.code}
+                    onClick={() => handleLanguageChange(lang.code)}
+                    className={`w-full text-left px-4 py-2 text-sm font-medium hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors flex items-center justify-between ${
+                      currentLang === lang.code ? 'text-brand-600 dark:text-brand-400 bg-brand-50 dark:bg-brand-900/20' : ''
+                    }`}
+                  >
+                    <span>{lang.label}</span>
+                    {currentLang === lang.code && <CheckCircle2 className="w-4 h-4" />}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+
           {/* Theme Toggle Button */}
           <button
             onClick={toggleTheme}
@@ -167,6 +254,13 @@ export const Navbar = () => {
         {/* Mobile menu toggle */}
         <div className="flex md:hidden items-center gap-2">
           <button
+            onClick={() => handleLanguageChange(currentLang === 'en' ? 'es' : 'en')}
+            className="p-2 rounded-lg text-slate-600 dark:text-slate-300"
+            aria-label="Toggle Language"
+          >
+            <GoogleTranslateIcon className="w-5 h-5" />
+          </button>
+          <button
             onClick={toggleTheme}
             className="p-2 rounded-lg text-slate-600 dark:text-slate-300"
             aria-label="Toggle Theme"
@@ -256,6 +350,9 @@ export const Navbar = () => {
           </div>
         </div>
       )}
+      
+      {/* Hidden Google Translate Element */}
+      <div id="google_translate_element" className="opacity-0 absolute w-0 h-0 overflow-hidden -z-[100] pointer-events-none" />
     </header>
   );
 };
