@@ -36,14 +36,16 @@ export const Navbar = () => {
     setIsLangMenuOpen(false);
     
     if (langCode === 'en') {
-      // Clear translation
+      // Clear translation cookies from both root and domain
       document.cookie = 'googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
       document.cookie = `googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; domain=${window.location.hostname}; path=/;`;
     } else {
       document.cookie = `googtrans=/en/${langCode}; path=/;`;
       document.cookie = `googtrans=/en/${langCode}; domain=${window.location.hostname}; path=/;`;
     }
-    window.location.reload();
+    // Use href assignment instead of reload() so Vercel SPA routing handles it cleanly
+    // eslint-disable-next-line no-self-assign
+    window.location.href = window.location.href;
   };
 
   const languages = [
